@@ -1,0 +1,1 @@
+# This folder is solely meant for unit testing purposes. It is used as a temporary folder for the test database.

@@ -1,0 +1,16 @@
+1, Check git status, git status
+2, Add all git command, git add --all
+3, Go home, cd ~/
+4, pwd, pwd -P
+5, Go 4 out, cd ../../../..
+6, Show hidden files here, ls -a
+7, List all the files in the subdirectories, ls -R
+8, Show the file sizes in easily readable formats, ls -lh
+9, Current directory's system disk space usage, df -h
+10, The du command, du -s
+11, Ping google, ping google.com -c 4
+12, System info, uname -a
+13, ping localhost, ping localhost -c 4
+14, environment, env
+15, Source zsh, source ~./zshrc
+16, Hello, echo "Hello world"
