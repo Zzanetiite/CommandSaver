@@ -2,6 +2,7 @@ from typing import List
 from command_saver.visual_design.formatter import StringFormatter, PanelFormatter, TableFormatter
 from command_saver.table.saved_commands import SavedCommands
 from command_saver.table.menu_options import MenuOptions
+from constants import help_menu_info, main_menu_info, saved_commands_info, intermediate_menu_info
 
 
 class ViewContents:
@@ -13,22 +14,12 @@ class ViewContents:
         """
         Parameters used for the prints.
         """
-        # Prepare prompt and usage instructions to use in all layouts.
-        prompt = 'Please select one of the available Menu Options or an option and a command.\n'
-        usage = 'Usage: [OPTION] [COMMAND]'
-        using_from_terminal = '\nTo use CommandSaver directly from the terminal, set an alias for the program, like so:\n' + \
-        'alias cs="python "...your/path/to/program/CommandSaver/command_saver/cs.py"\n' + \
-        'And then call the options with commands using:\n' + \
-        '[ALIAS] [OPTION] [COMMAND]'
-        # Prepare contents for each of the layouts
-        self.help_menu_info = ['Help Page', 'Application version: 2.0.\n',
-                               usage,
-                               'This is a command line interface application that is used the same way as aliases, '
-                               'but meant for longer and more complex commands.',
-                               using_from_terminal]
-        self.main_menu_info = ['Main Menu', usage, prompt]
-        self.saved_commands_info = ['Saved Commands', usage, prompt]
-        self.intermediate_menu_info = ['What would you like to do next?', usage, prompt]
+        # Page contents
+        self.help_menu_info = help_menu_info
+        self.main_menu_info = main_menu_info
+        self.saved_commands_info = saved_commands_info
+        self.intermediate_menu_info = intermediate_menu_info
+
         # Fetch table data that is to be displayed in the layouts
         self.recent_commands_list = SavedCommands().recent_commands_list()
         self.all_saved_commands_list = SavedCommands().view_all_saved_commands()
@@ -117,7 +108,8 @@ class ViewContents:
         # Print the header part of the main menu
         PanelFormatter(panel_to_format=self.main_menu_info).print_panel()
         # Prepare options available in the main menu
-        available_options = self.__available_options(available_list=['e', 'a', 'edit', 'd', 'ss', 'bs', 'help', 'q', 't'])
+        available_options = self.__available_options(
+            available_list=['e', 'a', 'edit', 'd', 'ss', 'bs', 'help', 'q', 't'])
         # Print the Menu Options table that shows options available in the Main Menu
         TableFormatter(list_to_format=available_options,
                        table_title='MENU OPTIONS').print_table_menu_options()
@@ -134,7 +126,8 @@ class ViewContents:
         # Print the header part of the saved commands menu
         PanelFormatter(panel_to_format=self.saved_commands_info).print_panel()
         # Prepare options available in the saved commands menu
-        available_options = self.__available_options(available_list=['e', 'a', 'edit', 'd', 'ss', 't', 'b', 'q'])
+        available_options = self.__available_options(
+            available_list=['e', 'a', 'edit', 'd', 'ss', 't', 'b', 'q'])
         # Print the Menu Options table that shows options available at this point
         TableFormatter(list_to_format=available_options,
                        table_title='MENU OPTIONS').print_table_menu_options()
@@ -156,11 +149,14 @@ class ViewContents:
         # create a placeholder with intermediate menu contents list
         panel_with_previous_opt = self.intermediate_menu_info
         # Add an item to the intermediate menu: help the user remember what is the last command they used
-        panel_with_previous_opt.append(f"Last command: {previous_option} - {opt_descr}.")
+        panel_with_previous_opt.append(
+            f"Last command: {previous_option} - {opt_descr}.")
         # Print the header part of the intermediate panel
-        PanelFormatter(panel_to_format=self.intermediate_menu_info).print_panel()
+        PanelFormatter(
+            panel_to_format=self.intermediate_menu_info).print_panel()
         # Prepare options available at this point
-        available_options = self.__available_options(available_list=['r', 'e', 'b', 'bs', 'q'])
+        available_options = self.__available_options(
+            available_list=['r', 'e', 'b', 'bs', 'q'])
         # Print the Menu Options table that shows options available at this point
         TableFormatter(list_to_format=available_options,
                        table_title='MENU OPTIONS').print_table_menu_options()
@@ -172,7 +168,8 @@ class ViewContents:
 
         """
         # Prepare options available at this point
-        available_options = self.__available_options(available_list=['b', 'bs', 'q'])
+        available_options = self.__available_options(
+            available_list=['b', 'bs', 'q'])
         # Print the Menu Options table that shows options available at this point
         TableFormatter(list_to_format=available_options,
                        table_title='OPTIONS AVAILABLE AT ANY POINT').print_table_menu_options()
@@ -196,8 +193,8 @@ class ViewContents:
 
         """
         # fetch the command
-        one_full_command = SavedCommands(command_id=command_id).fetch_one_full_command()
+        one_full_command = SavedCommands(
+            command_id=command_id).fetch_one_full_command()
         # Print a table that shows command data
-        TableFormatter(list_to_format=one_full_command).print_table_one_command(command_id=command_id)
-
-
+        TableFormatter(list_to_format=one_full_command).print_table_one_command(
+            command_id=command_id)

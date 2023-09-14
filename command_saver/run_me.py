@@ -42,10 +42,11 @@ class RunMe:
     def __init__(self, args=None):
         # Allows to call the options and commands from terminal without opening the program
         self.args = args
-        self.parser = argparse.ArgumentParser(description="Your program description here")
-        self.parser.add_argument('option', nargs="?", default=None, 
+        self.parser = argparse.ArgumentParser(
+            description="Your program description here")
+        self.parser.add_argument('option', nargs="?", default=None,
                                  help="Use e to execute a saved command")
-        self.parser.add_argument("command_id", nargs="?", default=None, 
+        self.parser.add_argument("command_id", nargs="?", default=None,
                                  help="Specify the Command ID (number) of the command")
 
         # If submitted as terminal call for a single execute
@@ -90,6 +91,9 @@ class RunMe:
         Returns: running program in the terminal.
 
         """
+        if self.option == None:
+            # Launch the main menu to ask user what they want to do
+            ViewContents().print_main_menu()
         #  While not exiting the program
         while self.option != 'q':
             # refresh lists
@@ -108,8 +112,6 @@ class RunMe:
                     if self.one_action_only_executed:
                         self.option = 'q'
                     else:
-                        # Launch the main menu to ask user what they want to do
-                        ViewContents().print_main_menu()
                         # Ask what the user would like to do next.
                         self.option, self.command_id = self.convert_answer((InputWindow().ask_input(
                             msg='\nPlease choose what you would like to do: ',
@@ -121,8 +123,8 @@ class RunMe:
                     self.option, self.command_id = self.convert_answer((InputWindow().ask_input(
                         msg='\nValidating input...',
                         valid_answers='any_string',
-                        is_input_from_args = True,
-                        input_from_args = self.option + str(self.command_id) if self.command_id is not None else self.option)))
+                        is_input_from_args=True,
+                        input_from_args=self.option + str(self.command_id) if self.command_id is not None else self.option)))
             # If answer for option is None, there was an error,
             # go back to Main Menu to remind user of options available.
             # If option is 'b', user wants to see the Main Menu.
@@ -136,7 +138,8 @@ class RunMe:
             # If menu option is not one of the valid menu options,
             if self.option not in self.valid_options:
                 # Let the user know that error has occurred because option was not found.
-                StringFormatter(text_to_format='Error! Option not in the Main Menu.').print_red_bold()
+                StringFormatter(
+                    text_to_format='Error! Option not in the Main Menu.').print_red_bold()
                 # ask them to try again
                 print('Please try again.')
                 # and return to the start of the loop
@@ -291,7 +294,8 @@ class RunMe:
             # Assign option as None
             option = None
             # and print an error
-            StringFormatter(text_to_format='Error! Valid option has not been found.').print_red_bold()
+            StringFormatter(
+                text_to_format='Error! Valid option has not been found.').print_red_bold()
             print('Please try again.')
             # and don't look any further
             return option, None
@@ -299,7 +303,7 @@ class RunMe:
             search_text = re.search(
                 r'([t])(.+)', answer
             )
-            if search_text:                
+            if search_text:
                 command_id = search_text.group(2)
                 print('text found= ', command_id)
                 return option, command_id
@@ -432,7 +436,7 @@ class RunMe:
         SavedCommands(command_id=self.command_id).execute_command()
         # # Print success message if an error was not thrown
         # StringFormatter(text_to_format='Success! Command executed.').print_green_bold()
-    
+
     def __option_to_execute_text_in_terminal(self):
         """
         Uses module to execute the command and
@@ -440,7 +444,8 @@ class RunMe:
 
         """
         # Try to execute the command. OS sends the command to the terminal.
-        SavedCommands(command_id=self.command_id, option='t').execute_command(text_to_terminal=True, text_for_terminal=self.command_id)     
+        SavedCommands(command_id=self.command_id, option='t').execute_command(
+            text_to_terminal=True, text_for_terminal=self.command_id)
 
     def __option_to_delete(self):
         """
@@ -460,7 +465,8 @@ class RunMe:
         # Inform the user of the exit options
         ViewContents().print_input_window_table()
         # Launch the edit function
-        edit_response = SavedCommands(command_id=self.command_id).edit_command()
+        edit_response = SavedCommands(
+            command_id=self.command_id).edit_command()
         # Check if user chose to leave
         global_cmd = self.__global_option_checker(edit_response)
         # If so,
