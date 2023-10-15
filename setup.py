@@ -1,9 +1,14 @@
 from setuptools import setup, find_packages
 
+with open('README.md', 'r') as f:
+    long_description = f.read()
+
 setup(
     name="command-saver-terminal-program",
-    version="2.0.3",
+    version="2.0.4",
     description="Simple terminal helper program to save long terminal commands. See git: https://github.com/Zzanetiite/CommandSaver",
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     packages=find_packages(),
     entry_points={
         'console_scripts': [
