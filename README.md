@@ -17,18 +17,23 @@ Project is developed using PyCharm integrated development environment (IDE) and 
 
 ## Documentation
 For any additional details on the design and project see Software Engineering Fundamentals final assignment.
-Read more about rich here: https://rich.readthedocs.io/en/stable/tables.html
+
+Read more about rich package here: https://rich.readthedocs.io/en/stable/tables.html
+
 Read more about logger here: https://docs.python.org/3/library/logging.html
+
 Read more about mock objects used for unit tests here: https://docs.python.org/3/library/unittest.mock.html?highlight=patch#module-unittest.mock
+
 ## Development
 This program has no dependencies, other than ones described in the requirements.txt file.
 
+This program has a comment for almost every line of the code, this was a requirement for the coursework assignment.
+
 ### Testing
-To test unittests, call them in the terminal using python or use Python interpreter. Tests have not been updated for CommandSaver version 2.0 (outdated from 1.0 - didn't have the time to do them). 
+To test unittests, call them in the terminal using python or use Python interpreter. Tests have not been updated for CommandSaver version 2.0 (outdated from 1.0 - didn't have the time to do them).
 
 ### Running
 To run the program use Python to open the cs.py file in the command_saver folder or call from the terminal.
 
 ### Deploying
-Run the program through Python: it is ready to go!
-# CommandSaver
+Run the program through terminal using `cs OPTION COMMAND_ID` or via python calling the `cs.py`.

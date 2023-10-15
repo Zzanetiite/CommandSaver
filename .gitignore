@@ -1,2 +1,15 @@
 # Environment
 venv/
+
+# Ignore Node.js dependencies
+node_modules/
+
+# Ignore Python bytecode files
+*.pyc
+__pycache__/
+
+# Ignore PyCharm IDE settings (use this if you're using PyCharm)
+.idea/
+
+# Ignore Visual Studio Code settings (use this if you're using VS Code)
+.vscode/
