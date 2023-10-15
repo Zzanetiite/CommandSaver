@@ -13,3 +13,12 @@ __pycache__/
 
 # Ignore Visual Studio Code settings (use this if you're using VS Code)
 .vscode/
+
+# Ignore build
+build/
+
+# Ignore egg-info
+*.egg-info/
+
+# Ignore dist
+dist/

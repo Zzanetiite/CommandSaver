@@ -37,3 +37,24 @@ To run the program use Python to open the cs.py file in the command_saver folder
 
 ### Deploying
 Run the program through terminal using `cs OPTION COMMAND_ID` or via python calling the `cs.py`.
+
+### Packaging
+To package program with changes use:
+```
+pip install setuptools wheel
+python setup.py sdist bdist_wheel
+```
+
+To distribute package use:
+```
+pip install twine
+twine upload dist/*
+```
+
+## Installation via Pip
+Use this command to install the package.
+```
+pip install command-saver-terminal-program
+```
+
+Use `cs` to launch the program in the terminal.
