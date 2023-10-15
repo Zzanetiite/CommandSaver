@@ -22,3 +22,6 @@ build/
 
 # Ignore dist
 dist/
+
+# Ignore logs
+cs.log

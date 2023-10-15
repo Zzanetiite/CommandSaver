@@ -45,9 +45,13 @@ pip install setuptools wheel
 python setup.py sdist bdist_wheel
 ```
 
-To distribute package use:
+To distribute package use in IDE:
 ```
 pip install twine
+```
+
+And afterwards, in the command prompt:
+```
 twine upload dist/*
 ```
 
