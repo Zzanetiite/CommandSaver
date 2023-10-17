@@ -2,6 +2,7 @@ import logging
 from command_saver.run_me import RunMe
 from constants import log_path
 
+
 def main():
     # Set up logger configuration for the program.
     logging.basicConfig(level=logging.DEBUG,
@@ -10,8 +11,8 @@ def main():
                         filename=log_path,
                         filemode='w')
     # Run the program
-    result = RunMe().run_program()
-    print(result)
+    RunMe().run_program()
+
 
 if __name__ == '__main__':
     main()

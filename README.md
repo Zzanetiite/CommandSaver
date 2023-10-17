@@ -55,6 +55,11 @@ And afterwards, in the command prompt:
 twine upload dist/*
 ```
 
+To locally test the dist package:
+```
+pip install --user dist/command-saver-terminal-program-1.0.0.tar.gz
+```
+
 ## Installation via Pip
 Use this command to install the package.
 ```

@@ -9,9 +9,8 @@ from command_saver.utils.default_database import DefaultDatabase
 from command_saver.visual_design.formatter import StringFormatter
 from command_saver.errors.sql_err import SQL_err
 from command_saver.errors.err import Err
-from os import path
-import command_saver
-from constants import database_path, log_path
+from constants import database_path, log_path, disposition_path
+
 
 class SavedCommands:
     """
@@ -45,7 +44,7 @@ class SavedCommands:
             DefaultDatabase().create_default_database()
         # Set up variables used in all methods
         if self.command_id is not None and self.option != 't':
-                self.key_id = self.find_key_id()
+            self.key_id = self.find_key_id()
 
     # Private functions support other methods by doing
     # repetitive, multi-choice and multi-path tasks, and also methods & actions
@@ -75,18 +74,18 @@ class SavedCommands:
 
     def print_row_ids(self):
         self.cur.execute(
-            "SELECT ROW_NUMBER() OVER() AS num_row, command_id, command_description," 
+            "SELECT ROW_NUMBER() OVER() AS num_row, command_id, command_description,"
             "saved_command FROM saved_commands ORDER BY command_id")
         list_all_commands = list(self.cur.fetchall())
         print(list_all_commands)
         self.commit_and_close_database()
-      
+
     def print_all_tables(self):
         self.cur.execute(
-            "SELECT name FROM sqlite_master WHERE type='table';") 
+            "SELECT name FROM sqlite_master WHERE type='table';")
         list_all_tables = list(self.cur.fetchall())
         print(list_all_tables)
-        self.commit_and_close_database()   
+        self.commit_and_close_database()
 
     def __view_all_saved_commands_method(self):
         """
@@ -172,7 +171,8 @@ class SavedCommands:
         # Try to fetch the command
         try:
             # log the event
-            logging.info(f"Trying to find (command_id, key_id) {command_id, self.key_id} in the saved commands table.")
+            logging.info(
+                f"Trying to find (command_id, key_id) {command_id, self.key_id} in the saved commands table.")
             # fetch the tag
             self.cur.execute(
                 "SELECT saved_command FROM saved_commands WHERE command_id LIKE ?", (self.key_id,))
@@ -190,7 +190,8 @@ class SavedCommands:
             return None
         # if sqlite happened to run into problems
         except KeyError as e:
-            Err(error=e, msg=f"Error! Command ID {command_id} not found.").error()
+            Err(error=e,
+                msg=f"Error! Command ID {command_id} not found.").error()
         except sqlite3.Error as e:
             # Prepare message for the error
             msg = 'SQLite error: %s' % (' '.join(e.args))
@@ -216,11 +217,13 @@ class SavedCommands:
             # Sanity check, isf user is sure they want to do the risky action
             msg = f"Are you sure you want to {action_name} the command {self.command_id}: {command}? (Y/N)"
             # Ask user if they are sure they want to delete this?
-            confirmation = InputWindow().ask_input(msg=msg, valid_answers=['Y', 'y', 'N', 'n', 'Yes', 'No'])
+            confirmation = InputWindow().ask_input(
+                msg=msg, valid_answers=['Y', 'y', 'N', 'n', 'Yes', 'No'])
             if confirmation in ['Y', 'y', 'Yes']:
                 # Try to execute the command
                 try:
-                    logging.info(f"Executing {action_name} request with command ID {self.command_id}")
+                    logging.info(
+                        f"Executing {action_name} request with command ID {self.command_id}")
                     # by calling the action
                     action(command)
                 # Except if something went wrong with Sqlite
@@ -247,7 +250,8 @@ class SavedCommands:
 
         """
         # Pass the action to the function. This way it only executes when the other function calls it.
-        self.__risky_action_confirmation("delete", self.__delete_command_action)
+        self.__risky_action_confirmation(
+            "delete", self.__delete_command_action)
 
     def __delete_command_action(self, command: str):
         """
@@ -257,15 +261,16 @@ class SavedCommands:
 
         """
         # Delete the command in the database
-        self.cur.execute("DELETE FROM saved_commands WHERE command_id=?", (self.key_id,))
+        self.cur.execute(
+            "DELETE FROM saved_commands WHERE command_id=?", (self.key_id,))
         # Commit delete and close the database
         self.commit_and_close_database()
         # Let the user know that the update has been a success.
         text = f"Success! Command with ID: {self.command_id} has been deleted'."
         StringFormatter(text_to_format=text).print_green_bold()
 
-    def execute_command(self, 
-                        text_to_terminal=False, 
+    def execute_command(self,
+                        text_to_terminal=False,
                         text_for_terminal=None):
         """
         Executes saved commands.
@@ -274,7 +279,8 @@ class SavedCommands:
         """
         if text_to_terminal:
             try:
-                logging.info(f"Trying to execute text into terminal. The text: {text_for_terminal}")
+                logging.info(
+                    f"Trying to execute text into terminal. The text: {text_for_terminal}")
                 # Run the command in the terminal
                 print("----Terminal----")
                 return os.system(str(text_for_terminal))
@@ -291,7 +297,8 @@ class SavedCommands:
         else:
             # try to execute the command
             try:
-                logging.info("Trying to update popularity and to execute a command.")
+                logging.info(
+                    "Trying to update popularity and to execute a command.")
                 # Update how many times the command has been called
                 self.__update_popularity()
                 # Save data and close the database.
@@ -317,7 +324,8 @@ class SavedCommands:
         because this is a risky action.
         """
         # Pass the action to the function. This way it only executes when the other function calls it.
-        response = self.__risky_action_confirmation("edit", self.__edit_command_action)
+        response = self.__risky_action_confirmation(
+            "edit", self.__edit_command_action)
         # response is given if the user chose to leave
         return response
 
@@ -372,7 +380,8 @@ class SavedCommands:
         author = open_data.find_author()
         # Prepare a row to upload to the database.
         new_command = (
-            command_description, new_command, str(date_today), int(timestamp_now * 1000), 0, author,
+            command_description, new_command, str(
+                date_today), int(timestamp_now * 1000), 0, author,
             int(timestamp_now * 1000))
         # add the command to the database
         self.cur.executemany("INSERT INTO saved_commands (command_description, saved_command, "
@@ -415,8 +424,6 @@ class SavedCommands:
         Returns: a disposition document with all database commands.
 
         """
-        # Location where to save the file
-        disposition_path = path.dirname(command_saver.__file__) + '/disposition/disposition.txt'
         # Fetch existing command list
         commands_to_save = self.view_all_saved_commands()
         # Make a file and record the data
@@ -455,7 +462,8 @@ class SavedCommands:
         # Try to update the timestamp
         try:
             # log the event
-            logging.info(f'Trying to update timestamp of the command with commadn_id: {self.command_id}.')
+            logging.info(
+                f'Trying to update timestamp of the command with commadn_id: {self.command_id}.')
             # Do the update
             self.cur.execute(
                 "UPDATE saved_commands SET last_edited=? WHERE command_id=?", (timestamp_now, self.key_id,))

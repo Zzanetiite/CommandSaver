@@ -1,14 +1,16 @@
-from os import path
-import command_saver
+from os import path, makedirs
 import time
 
 # Path for logs
-directory = path.dirname(command_saver.__file__)
-folder = 'data'
+directory = path.expanduser("~")
+folder = 'command_saver'
 filename = 'cs.log'
 log_path = path.join(directory, folder, filename)
-# Path for default database location
+disposition_path = path.join(directory, folder, 'disposition.txt')
+# Path for default database location to be in user's home directory
 database_path: str = path.join(directory, folder, 'command_saver.db')
+# Create the directory if it doesn't exist
+makedirs(path.dirname(log_path), exist_ok=True)
 
 # Menu options - these cannot be changed by the user, but if admin chooses to, they can do it here.
 timestamp_now = time.time()
@@ -39,11 +41,11 @@ using_from_terminal = '\nTo use CommandSaver directly from the terminal, set an 
     'Add it to PYPATH, and then call the options with commands using:\n' + \
     '[ALIAS] [OPTION] [COMMAND]'
 # Prepare contents for each of the layouts
-help_menu_info = ['Help Page', 'Application version: 2.0.\n',
-                       usage,
-                       'This is a command line interface application that is used the same way as aliases, '
-                       'but meant for longer and more complex commands.',
-                       using_from_terminal]
+help_menu_info = ['Help Page', 'Application version: 1.0.0.\n',
+                  usage,
+                  'This is a command line interface application that is used the same way as aliases, '
+                  'but meant for longer and more complex commands.',
+                  using_from_terminal]
 main_menu_info = ['Main Menu', usage, prompt]
 saved_commands_info = ['Saved Commands', usage, prompt]
 intermediate_menu_info = [

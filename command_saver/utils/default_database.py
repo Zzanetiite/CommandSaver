@@ -2,11 +2,11 @@ import sqlite3
 from datetime import date
 import time
 from pathlib import Path
-from os import remove, path
-import command_saver
+from os import remove
 from command_saver.input_window.input_window import InputWindow
 from command_saver.visual_design.formatter import StringFormatter
-from constants import menu_options_data
+from constants import menu_options_data, database_path
+
 
 class DefaultDatabase:
     """
@@ -26,8 +26,13 @@ class DefaultDatabase:
         # If call is not a test, then it is a default database set up for a missing database,
         # so set database path to the expected program database location
         if self.mock_database_path is None:
-            # Path  taken through path module to ensure that the program can be called from different locations
-            self.database_path = path.dirname(command_saver.__file__) + '/data/command_saver.db'
+            try:
+                self.database_path = database_path
+            except sqlite3.Error as e:
+                print(f"SQLite error: {e}")
+
+            except Exception as e:
+                print(f"An error occurred: {e}")
 
         # otherwise, assume it is a test and
         else:
@@ -80,7 +85,8 @@ class DefaultDatabase:
                 user_choice = InputWindow().ask_input(msg='Please choose Yes (delete) or No (keep): ',
                                                       msg_info='Database found, would you like to delete all '
                                                                'data and create a new database with default data?',
-                                                      valid_answers=['Yes', 'No', 'Y', 'N']
+                                                      valid_answers=[
+                                                          'Yes', 'No', 'Y', 'N']
                                                       )
                 # If user chooses to delete the backup
                 if user_choice in ['Yes', 'Y']:
@@ -148,7 +154,7 @@ class DefaultDatabase:
         # Add data to the table
         cur.executemany("INSERT INTO user_data (username, department)"
                         "VALUES(?, ?)", self.user_data)
-        
+
     def create_default_database(self):
         """
         Creates a database with 3 users: saved commands,
@@ -173,6 +179,5 @@ class DefaultDatabase:
             # Close the connection
             con.close()
             # Print the success message to the user
-            StringFormatter(text_to_format='Success! Database created.').print_green_bold()
-
-# DefaultDatabase().create_default_database()
+            StringFormatter(
+                text_to_format='Success! Database created.').print_green_bold()

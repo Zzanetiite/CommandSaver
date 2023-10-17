@@ -4,6 +4,7 @@ from command_saver.errors.sql_err import SQL_err
 import logging
 from constants import database_path
 
+
 class MenuOptions:
     """Allows to make changes and extract things from Menu Options table."""
 
@@ -70,13 +71,13 @@ class MenuOptions:
         self.commit_and_close_database()
         # return a list of menu options
         return list_all_options
-    
+
     def add_option(self, option_to_add):
         # Add to menu options table
         self.cur.executemany(
-            "INSERT INTO menu_options (option_tag, option_description, timestamp_when_created)" 
+            "INSERT INTO menu_options (option_tag, option_description, timestamp_when_created)"
             "VALUES(?, ?, ?)", (option_to_add)
-            )
+        )
         # close the database
         self.commit_and_close_database()
 

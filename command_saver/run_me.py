@@ -9,6 +9,7 @@ from command_saver.table.user_data import UserData
 from command_saver.utils.default_database import DefaultDatabase
 import re
 from pathlib import Path
+from constants import database_path
 
 
 class RunMe:
@@ -26,7 +27,7 @@ class RunMe:
     repeat_last_command = False
     # Check if database exists before doing anything else
     # Load database path used in the program
-    database = DefaultDatabase().database_path
+    database = database_path
     # If path exists
     if Path(database).is_file():
         # Pass and do nothing

@@ -6,13 +6,14 @@ from command_saver.visual_design.formatter import StringFormatter
 from command_saver.errors.sql_err import SQL_err
 from os import path
 import command_saver
+from constants import database_path
 
 
 class UserData:
     """Allows to make changes in the User Data table."""
 
     def __init__(self,
-                 database_path: str = path.dirname(command_saver.__file__) + '/data/command_saver.db',
+                 database_path: str = database_path,
                  ):
         """
         Executes commands that can be done in the table.
@@ -83,6 +84,7 @@ class UserData:
         """
         Calls the method through sql error checker and step logger.
         """
+        print("in author change function")
         # Prepare a message for the log
         msg = f'Trying to change the author from user data table.'
         # Pass the method to the error checker. This way it only executes when the other function calls it.
