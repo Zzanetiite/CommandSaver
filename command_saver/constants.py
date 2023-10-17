@@ -31,7 +31,7 @@ menu_options_data = [
     ('setuserdep', "Set user's department.", int(timestamp_now * 1000)),
 ]
 
-# Text for the menus
+version = '2.1.1'
 
 # Prepare prompt and usage instructions to use in all layouts.
 prompt = 'Please select one of the available Menu Options or an option and a command.\n'
@@ -41,8 +41,8 @@ using_from_terminal = '\nTo use CommandSaver directly from the terminal, set an 
     'Add it to PYPATH, and then call the options with commands using:\n' + \
     '[ALIAS] [OPTION] [COMMAND]'
 # Prepare contents for each of the layouts
-help_menu_info = ['Help Page', 'Application version: 2.1.0.\n',
-                  usage,
+help_menu_info = ['Help Page', 'Application version: ', version,
+                  '\n', usage,
                   'This is a command line interface application that is used the same way as aliases, '
                   'but meant for longer and more complex commands.',
                   using_from_terminal]
