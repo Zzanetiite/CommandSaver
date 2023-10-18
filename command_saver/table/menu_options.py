@@ -2,7 +2,7 @@ import sqlite3
 from command_saver.utils.default_database import DefaultDatabase
 from command_saver.errors.sql_err import SQL_err
 import logging
-from constants import database_path
+from command_saver.constants import database_path
 
 
 class MenuOptions:

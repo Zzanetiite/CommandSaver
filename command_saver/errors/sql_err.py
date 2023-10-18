@@ -1,6 +1,6 @@
 import logging
 import sqlite3
-from constants import log_path
+from command_saver.constants import log_path
 from command_saver.visual_design.formatter import StringFormatter
 
 
@@ -33,7 +33,8 @@ class SQL_err:
             logging.error(f"An error occurred when trying {method_description}."
                           f"\nThe error: {e=}, {type(e)=}")
             # Let the user know that an error has occurred.
-            StringFormatter(text_to_format='An error has occurred.').print_red_bold()
+            StringFormatter(
+                text_to_format='An error has occurred.').print_red_bold()
             print(f"Unexpected {e=}, {type(e)=}. See logs in: {log_path}")
 
     @staticmethod
@@ -65,5 +66,6 @@ class SQL_err:
             logging.error(f"An error occurred when trying {method_description}."
                           f"\nThe error: {e=}, {type(e)=}")
             # Let the user know that an error has occurred.
-            StringFormatter(text_to_format='An error has occurred.').print_red_bold()
+            StringFormatter(
+                text_to_format='An error has occurred.').print_red_bold()
             print(f"Unexpected {e=}, {type(e)=}. See logs in: /tmp/cs.log")

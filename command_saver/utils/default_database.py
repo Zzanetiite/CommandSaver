@@ -5,7 +5,7 @@ from pathlib import Path
 from os import remove
 from command_saver.input_window.input_window import InputWindow
 from command_saver.visual_design.formatter import StringFormatter
-from constants import menu_options_data, database_path
+from command_saver.constants import menu_options_data, database_path
 
 
 class DefaultDatabase:

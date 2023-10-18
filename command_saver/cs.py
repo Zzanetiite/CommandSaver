@@ -1,6 +1,6 @@
 import logging
 from command_saver.run_me import RunMe
-from constants import log_path
+from command_saver.constants import log_path
 
 
 def main():

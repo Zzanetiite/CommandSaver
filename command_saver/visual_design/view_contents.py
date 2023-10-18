@@ -2,7 +2,7 @@ from typing import List
 from command_saver.visual_design.formatter import StringFormatter, PanelFormatter, TableFormatter
 from command_saver.table.saved_commands import SavedCommands
 from command_saver.table.menu_options import MenuOptions
-from constants import help_menu_info, main_menu_info, saved_commands_info, intermediate_menu_info
+from command_saver.constants import help_menu_info, main_menu_info, saved_commands_info, intermediate_menu_info
 
 
 class ViewContents:

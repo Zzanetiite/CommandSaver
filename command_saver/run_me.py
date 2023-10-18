@@ -9,7 +9,7 @@ from command_saver.table.user_data import UserData
 from command_saver.utils.default_database import DefaultDatabase
 import re
 from pathlib import Path
-from constants import database_path
+from command_saver.constants import database_path
 
 
 class RunMe:
