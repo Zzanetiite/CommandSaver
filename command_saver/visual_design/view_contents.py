@@ -6,10 +6,7 @@ from command_saver.constants import (
     help_menu_info,
     main_menu_info,
     saved_commands_info,
-    intermediate_menu_info,
     options_within_main_menu,
-    options_within_saved_commands_menu,
-    options_within_intermediate_menu,
     options_within_input_menu
 )
 
@@ -27,7 +24,6 @@ class ViewContents:
         self.help_menu_info = help_menu_info
         self.main_menu_info = main_menu_info
         self.saved_commands_info = saved_commands_info
-        self.intermediate_menu_info = intermediate_menu_info
 
         # Fetch table data that is to be displayed in the layouts
         self.recent_commands_list = SavedCommands().recent_commands_list()
@@ -134,41 +130,9 @@ class ViewContents:
         """
         # Print the header part of the saved commands menu
         PanelFormatter(panel_to_format=self.saved_commands_info).print_panel()
-        # Prepare options available in the saved commands menu
-        available_options = self.__available_options(
-            available_list=options_within_saved_commands_menu)
-        # Print the Menu Options table that shows options available at this point
-        TableFormatter(list_to_format=available_options,
-                       table_title='MENU OPTIONS').print_table_menu_options()
         # Print the Saved Commands table with all saved commands options
         TableFormatter(list_to_format=self.all_saved_commands_list,
                        table_title='SAVED COMMANDS').print_table_saved_commands()
-
-    def print_intermediate_menu(self, previous_option: str):
-        """
-        Prints the intermediate menu contents.
-        Args:
-            previous_option: letter of the previous option that the user called. User can use it again.
-
-        Returns: prints the menu in the terminal.
-
-        """
-        # Find option's description
-        opt_descr = self.__find_option(opt=previous_option)
-        # create a placeholder with intermediate menu contents list
-        panel_with_previous_opt = self.intermediate_menu_info
-        # Add an item to the intermediate menu: help the user remember what is the last command they used
-        panel_with_previous_opt.append(
-            f"Last command: {previous_option} - {opt_descr}.")
-        # Print the header part of the intermediate panel
-        PanelFormatter(
-            panel_to_format=self.intermediate_menu_info).print_panel()
-        # Prepare options available at this point
-        available_options = self.__available_options(
-            available_list=options_within_intermediate_menu)
-        # Print the Menu Options table that shows options available at this point
-        TableFormatter(list_to_format=available_options,
-                       table_title='MENU OPTIONS').print_table_menu_options()
 
     def print_input_window_table(self):
         """

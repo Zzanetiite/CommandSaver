@@ -73,8 +73,6 @@ help_menu_info = ['Help Page', 'Application version: ', version,
                   using_from_terminal]
 main_menu_info = ['Main Menu', usage, prompt]
 saved_commands_info = ['Saved Commands', usage, prompt]
-intermediate_menu_info = [
-    'What would you like to do next?', usage, prompt]
 
 # Valid user answers when answering yes or no questions
 soft_yes_no = '(y/N)'
@@ -88,15 +86,7 @@ items_before_break = [
 ]
 
 options_within_main_menu = [
-    mo_e.key, mo_a.key, mo_edit.key, mo_d.key, mo_ss.key, mo_t.key, mo_help.key, mo_q.key,
-]
-
-options_within_saved_commands_menu = [
-    mo_e.key, mo_a.key, mo_edit.key, mo_d.key, mo_ss.key, mo_t.key, mo_mm.key, mo_q.key,
-]
-
-options_within_intermediate_menu = [
-    mo_r.key, mo_e.key, mo_mm.key, mo_scm.key, mo_q.key,
+    mo_e.key, mo_a.key, mo_edit.key, mo_d.key, mo_ss.key, mo_t.key, mo_help.key, mo_q.key, mo_mm.key, mo_r.key
 ]
 
 options_within_input_menu = [

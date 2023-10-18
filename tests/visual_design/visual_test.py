@@ -10,7 +10,8 @@ from command_saver.visual_design.view_contents import ViewContents
 string_to_test = 'String test!\nThis could be multiple lines.'
 # Set up a header to test
 simple_panel = ['Title', 'Header information.']
-panel_w_paragraphs = ['Title', 'Header information.', 'some info', 'some more info']
+panel_w_paragraphs = ['Title', 'Header information.',
+                      'some info', 'some more info']
 
 # Set up table data to test.
 test = DefaultDatabase()
@@ -28,7 +29,8 @@ StringFormatter(text_to_format=string_to_test).print_red_bold()
 # Pass, date 30/03/2023
 
 # Expecting a table of saved commands as output.
-TableFormatter(table_title=table_title, list_to_format=list_of_data).print_table_saved_commands()
+TableFormatter(table_title=table_title,
+               list_to_format=list_of_data).print_table_saved_commands()
 # Pass, date 30/03/2023
 
 
@@ -46,7 +48,8 @@ PanelFormatter(panel_to_format=panel_w_paragraphs).print_panel()
 
 # Expecting a table of menu options as output.
 # Expecting an empty row between some commands.
-TableFormatter(table_title=table_menu_title, list_to_format=list_of_menu_data).print_table_menu_options()
+TableFormatter(table_title=table_menu_title,
+               list_to_format=list_of_menu_data).print_table_menu_options()
 # Pass, date 30/03/2023
 
 
@@ -56,8 +59,6 @@ TableFormatter(table_title=table_menu_title, list_to_format=list_of_menu_data).p
 ViewContents().print_main_menu()
 # Test Saved Commands Menu layout
 ViewContents().print_saved_commands_menu()
-# Test Intermediate Menu layout
-ViewContents().print_intermediate_menu(previous_option='d')
 # Test input window table content
 ViewContents().print_input_window_table()
 # Test help page layout
