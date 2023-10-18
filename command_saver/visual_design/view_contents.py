@@ -120,16 +120,14 @@ class ViewContents:
                        table_title='MENU OPTIONS').print_table_menu_options()
         # Print the Recent Commands table using saved commands printing arrangement
         TableFormatter(list_to_format=self.recent_commands_list,
-                       table_title='SAVED COMMANDS').print_table_saved_commands()
+                       table_title='SAVED COMMANDS SUMMARY').print_table_saved_commands()
 
     def print_saved_commands_menu(self):
         """
         Prints a formatted Saved Commands menu of the application.
-        Returns: prints the menu in the terminal.
+        Returns: prints the commands in the terminal.
 
         """
-        # Print the header part of the saved commands menu
-        PanelFormatter(panel_to_format=self.saved_commands_info).print_panel()
         # Print the Saved Commands table with all saved commands options
         TableFormatter(list_to_format=self.all_saved_commands_list,
                        table_title='SAVED COMMANDS').print_table_saved_commands()

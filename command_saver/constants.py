@@ -30,7 +30,7 @@ mo_d = MenuOption('d', 'delete', 'Delete a command')
 mo_ss = MenuOption('ss', 'show single', 'Show single command full data')
 mo_t = MenuOption('t', 'terminal', 'Write a command directly for the terminal')
 mo_mm = MenuOption('mm', 'main menu', 'Go to the Main Menu')
-mo_scm = MenuOption('scm', 'saved commands menu',
+mo_scm = MenuOption('sc', 'saved commands menu',
                     'Go to the Saved Commands Menu')
 mo_help = MenuOption('h', 'help', 'Go to the Help Page')
 mo_r = MenuOption('r', 'repeat', 'Repeat last command')
@@ -86,7 +86,7 @@ items_before_break = [
 ]
 
 options_within_main_menu = [
-    mo_e.key, mo_a.key, mo_edit.key, mo_d.key, mo_ss.key, mo_t.key, mo_help.key, mo_q.key, mo_mm.key, mo_r.key
+    mo_e.key, mo_a.key, mo_edit.key, mo_d.key, mo_ss.key, mo_t.key, mo_help.key, mo_q.key, mo_mm.key, mo_r.key, mo_scm.key,
 ]
 
 options_within_input_menu = [
