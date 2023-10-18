@@ -64,15 +64,19 @@ class TableFormatter:
         for header in headers:
             # add a column to the table
             table.add_column(header, justify="left")
-        # If list has 3 items it is recent commands list: it is already sorted
-        if len(self.list_to_format[0]) != 3:
-            # Sort data by most used. Tuple[5] is the "times called" item in the list.
-            self.list_to_format.sort(key=lambda tup: tup[5], reverse=True)
-        # Create rows and fill them with data of first three items in each tuple.
-        # For an item in the given list
-        for item in self.list_to_format:
-            # add a row with each command's ID, description and terminal command
-            table.add_row(str(item[0]), str(item[1]), str(item[2]))
+        # If no entries, don't do anything, return an empty table to the user
+        if len(self.list_to_format) == 0:
+            pass
+        else:
+            # If list has 3 items it is recent commands list: it is already sorted
+            if len(self.list_to_format[0]) != 3:
+                # Sort data by most used. Tuple[5] is the "times called" item in the list.
+                self.list_to_format.sort(key=lambda tup: tup[5], reverse=True)
+            # Create rows and fill them with data of first three items in each tuple.
+            # For an item in the given list
+            for item in self.list_to_format:
+                # add a row with each command's ID, description and terminal command
+                table.add_row(str(item[0]), str(item[1]), str(item[2]))
         # Console needed for rich module to print panels
         console = Console()
         # Print the table
@@ -116,7 +120,7 @@ class TableFormatter:
         # Print the table
         console.print(table)
 
-    def print_table_one_command(self, command_id:str):
+    def print_table_one_command(self, command_id: str):
         """
         Prints saved commands table with one given command.
 
@@ -170,12 +174,12 @@ class PanelFormatter:
         # if there is are two strings, panel has a title
         elif len(self.panel_to_format) == 2:
             # take entry 0 of the list as heading and the other entry as text
-            rprint(Panel(self.panel_to_format[1], title=self.panel_to_format[0]))
+            rprint(Panel(self.panel_to_format[1],
+                   title=self.panel_to_format[0]))
         # if there are more than two strings, there is more than one paragraph
         else:
             # join paragraphs in a string with line break in-between them, except first entry
-            text_string = '\n'.join(self.panel_to_format[1:(len(self.panel_to_format))])
+            text_string = '\n'.join(
+                self.panel_to_format[1:(len(self.panel_to_format))])
             # first entry is a heading. Print the panel.
             rprint(Panel(text_string, title=self.panel_to_format[0]))
-
-
