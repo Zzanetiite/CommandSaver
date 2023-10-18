@@ -9,7 +9,7 @@ from command_saver.utils.default_database import DefaultDatabase
 from command_saver.visual_design.formatter import StringFormatter
 from command_saver.errors.sql_err import SQL_err
 from command_saver.errors.err import Err
-from constants import database_path, log_path, disposition_path
+from command_saver.constants import database_path, log_path, disposition_path
 
 
 class SavedCommands:

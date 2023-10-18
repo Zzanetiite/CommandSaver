@@ -31,7 +31,7 @@ menu_options_data = [
     ('setuserdep', "Set user's department.", int(timestamp_now * 1000)),
 ]
 
-version = '2.1.1'
+version = '2.1.2'
 
 # Prepare prompt and usage instructions to use in all layouts.
 prompt = 'Please select one of the available Menu Options or an option and a command.\n'
