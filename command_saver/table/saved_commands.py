@@ -9,7 +9,16 @@ from command_saver.utils.default_database import DefaultDatabase
 from command_saver.visual_design.formatter import StringFormatter
 from command_saver.errors.sql_err import SQL_err
 from command_saver.errors.err import Err
-from command_saver.constants import database_path, log_path, disposition_path
+from command_saver.constants import (
+    database_path,
+    log_path,
+    disposition_path,
+    mo_t,
+    soft_yes_no,
+    valid_no,
+    valid_yes,
+    global_commands
+)
 
 
 class SavedCommands:
@@ -43,7 +52,7 @@ class SavedCommands:
             # Create a new database in the expected location
             DefaultDatabase().create_default_database()
         # Set up variables used in all methods
-        if self.command_id is not None and self.option != 't':
+        if self.command_id is not None and self.option != mo_t.key:
             self.key_id = self.find_key_id()
 
     # Private functions support other methods by doing
@@ -215,11 +224,11 @@ class SavedCommands:
             return ValueError
         else:
             # Sanity check, isf user is sure they want to do the risky action
-            msg = f"Are you sure you want to {action_name} the command {self.command_id}: {command}? (Y/N)"
+            msg = f"Are you sure you want to {action_name} the command {self.command_id}: {command}? {soft_yes_no}"
             # Ask user if they are sure they want to delete this?
             confirmation = InputWindow().ask_input(
-                msg=msg, valid_answers=['Y', 'y', 'N', 'n', 'Yes', 'No'])
-            if confirmation in ['Y', 'y', 'Yes']:
+                msg=msg, valid_answers=valid_yes + valid_no)
+            if confirmation in valid_yes:
                 # Try to execute the command
                 try:
                     logging.info(
@@ -234,12 +243,12 @@ class SavedCommands:
                     # Call the error manager
                     Err(error=e, msg=msg).error()
             # If they choose not to delete the command,
-            if confirmation in ['N', 'n', 'No']:
+            if confirmation in valid_no:
                 print(f'{action_name} command stopped.')
                 # return to the saved commands menu
                 return ValueError
             # If user has chosen to leave and stop the edit
-            if confirmation in ['b', 'bs', 'q']:
+            if confirmation in global_commands:
                 # return the global command
                 return confirmation
 

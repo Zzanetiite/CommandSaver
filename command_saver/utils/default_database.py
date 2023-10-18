@@ -5,7 +5,12 @@ from pathlib import Path
 from os import remove
 from command_saver.input_window.input_window import InputWindow
 from command_saver.visual_design.formatter import StringFormatter
-from command_saver.constants import menu_options_data, database_path
+from command_saver.constants import (
+    menu_options_data,
+    database_path,
+    valid_no,
+    valid_yes
+)
 
 
 class DefaultDatabase:
@@ -50,9 +55,9 @@ class DefaultDatabase:
              self.author, int(self.timestamp_now * 1000)),
             ('Add all git command', 'git add --all', str(self.date_today), int(self.timestamp_now * 1000), 0,
              self.author, int(self.timestamp_now * 1000)),
-            ('Go 4 folders out', 'cd ../../../..', str(self.date_today), int(self.timestamp_now * 1000), 4,
+            ('Git log', 'git log --oneline', str(self.date_today), int(self.timestamp_now * 1000), 4,
              self.author, int(self.timestamp_now * 1000)),
-            ('Hello world!', '$echo "Hello world!"', str(self.date_today), int(self.timestamp_now * 1000), 5,
+            ('Hello world!', 'echo "Hello world!"', str(self.date_today), int(self.timestamp_now * 1000), 5,
              self.author, int(self.timestamp_now * 1000)),
         ]
         # Menu options - these cannot be changed by the user, but if admin chooses to, they can do it here.
@@ -85,17 +90,17 @@ class DefaultDatabase:
                 user_choice = InputWindow().ask_input(msg='Please choose Yes (delete) or No (keep): ',
                                                       msg_info='Database found, would you like to delete all '
                                                                'data and create a new database with default data?',
-                                                      valid_answers=[
-                                                          'Yes', 'No', 'Y', 'N']
+                                                      valid_answers=valid_yes + valid_no
+
                                                       )
                 # If user chooses to delete the backup
-                if user_choice in ['Yes', 'Y']:
+                if user_choice in valid_yes:
                     # delete the backup
                     self.delete_database()
                     # and return False (back up does not exist)
                     return False
                 # If user chooses to keep the backup
-                elif user_choice in ['No', 'N']:
+                elif user_choice in valid_no:
                     # return True (back up exists, we want to keep it)
                     return True
             # If database does not exist already

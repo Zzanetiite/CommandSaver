@@ -2,7 +2,16 @@ from typing import List
 from command_saver.visual_design.formatter import StringFormatter, PanelFormatter, TableFormatter
 from command_saver.table.saved_commands import SavedCommands
 from command_saver.table.menu_options import MenuOptions
-from command_saver.constants import help_menu_info, main_menu_info, saved_commands_info, intermediate_menu_info
+from command_saver.constants import (
+    help_menu_info,
+    main_menu_info,
+    saved_commands_info,
+    intermediate_menu_info,
+    options_within_main_menu,
+    options_within_saved_commands_menu,
+    options_within_intermediate_menu,
+    options_within_input_menu
+)
 
 
 class ViewContents:
@@ -109,7 +118,7 @@ class ViewContents:
         PanelFormatter(panel_to_format=self.main_menu_info).print_panel()
         # Prepare options available in the main menu
         available_options = self.__available_options(
-            available_list=['e', 'a', 'edit', 'd', 'ss', 'bs', 'help', 'q', 't'])
+            available_list=options_within_main_menu)
         # Print the Menu Options table that shows options available in the Main Menu
         TableFormatter(list_to_format=available_options,
                        table_title='MENU OPTIONS').print_table_menu_options()
@@ -127,7 +136,7 @@ class ViewContents:
         PanelFormatter(panel_to_format=self.saved_commands_info).print_panel()
         # Prepare options available in the saved commands menu
         available_options = self.__available_options(
-            available_list=['e', 'a', 'edit', 'd', 'ss', 't', 'b', 'q'])
+            available_list=options_within_saved_commands_menu)
         # Print the Menu Options table that shows options available at this point
         TableFormatter(list_to_format=available_options,
                        table_title='MENU OPTIONS').print_table_menu_options()
@@ -156,7 +165,7 @@ class ViewContents:
             panel_to_format=self.intermediate_menu_info).print_panel()
         # Prepare options available at this point
         available_options = self.__available_options(
-            available_list=['r', 'e', 'b', 'bs', 'q'])
+            available_list=options_within_intermediate_menu)
         # Print the Menu Options table that shows options available at this point
         TableFormatter(list_to_format=available_options,
                        table_title='MENU OPTIONS').print_table_menu_options()
@@ -169,7 +178,7 @@ class ViewContents:
         """
         # Prepare options available at this point
         available_options = self.__available_options(
-            available_list=['b', 'bs', 'q'])
+            available_list=options_within_input_menu)
         # Print the Menu Options table that shows options available at this point
         TableFormatter(list_to_format=available_options,
                        table_title='OPTIONS AVAILABLE AT ANY POINT').print_table_menu_options()

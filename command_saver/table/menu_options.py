@@ -80,8 +80,3 @@ class MenuOptions:
         )
         # close the database
         self.commit_and_close_database()
-
-
-# option_to_add = [('t', 'Write a command directly for the terminal', int(time.time() * 1000))]
-
-# MenuOptions().add_option(option_to_add=option_to_add)

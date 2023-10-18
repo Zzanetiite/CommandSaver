@@ -9,7 +9,24 @@ from command_saver.table.user_data import UserData
 from command_saver.utils.default_database import DefaultDatabase
 import re
 from pathlib import Path
-from command_saver.constants import database_path
+from command_saver.constants import (
+    database_path,
+    mo_a,
+    mo_d,
+    mo_e,
+    mo_edit,
+    mo_ss,
+    mo_t,
+    mo_mm,
+    mo_scm,
+    mo_help,
+    mo_r,
+    mo_q,
+    mo_exp,
+    mo_username,
+    mo_userdep,
+    global_commands
+)
 
 
 class RunMe:
@@ -96,7 +113,7 @@ class RunMe:
             # Launch the main menu to ask user what they want to do
             ViewContents().print_main_menu()
         #  While not exiting the program
-        while self.option != 'q':
+        while self.option != mo_q.key:
             # refresh lists
             self.__refresh_lists()
             # Check if the command is a repetition of the previous command
@@ -111,7 +128,7 @@ class RunMe:
                 if not self.one_action_only:
                     # If needed one action only, quit the program
                     if self.one_action_only_executed:
-                        self.option = 'q'
+                        self.option = mo_q.key
                     else:
                         # Ask what the user would like to do next.
                         self.option, self.command_id = self.convert_answer((InputWindow().ask_input(
@@ -128,8 +145,8 @@ class RunMe:
                         input_from_args=self.option + str(self.command_id) if self.command_id is not None else self.option)))
             # If answer for option is None, there was an error,
             # go back to Main Menu to remind user of options available.
-            # If option is 'b', user wants to see the Main Menu.
-            if self.option == 'b':
+            # Main Menu.
+            if self.option == mo_mm.key:
                 # Print the Main Menu
                 ViewContents().print_main_menu()
                 # Go back to the start of the loop
@@ -145,20 +162,20 @@ class RunMe:
                 print('Please try again.')
                 # and return to the start of the loop
                 continue
-            # if option is 'bs', go to the Saved Commands Menu
-            if self.option == 'bs':
+            # Saved Commands Menu
+            if self.option == mo_scm.key:
                 # Print the Saved Commands Menu
                 ViewContents().print_saved_commands_menu()
                 # and return to the start of the loop
                 continue
-            # If option is 'help', go to help page
-            if self.option == 'help':
+            # Help page
+            if self.option == mo_help.key:
                 # Print Help Page
                 ViewContents().print_help_page()
                 # and return to the start of the loop
                 continue
             # If option to set username is chosen
-            if self.option == 'setuser':
+            if self.option == mo_username.key:
                 # Use option setuser and keep note whether error occurred
                 option_stopped = self.do_repeatable_menu_option(error=sqlite3.Error,
                                                                 menu_option=self.__option_to_setuser)
@@ -167,7 +184,7 @@ class RunMe:
                     # Go back to the start of the loop
                     continue
             # If option to set user's department is chosen
-            if self.option == 'setuserdep':
+            if self.option == mo_userdep.key:
                 # Use option setuserdep and keep note whether error occurred
                 option_stopped = self.do_repeatable_menu_option(error=sqlite3.Error,
                                                                 menu_option=self.__option_to_setuserdep)
@@ -176,7 +193,7 @@ class RunMe:
                     # Go back to the start of the loop
                     continue
             # If chosen option is to execute text into terminal
-            if self.option == 't':
+            if self.option == mo_t.key:
                 if self.command_id is None:
                     self.command_id = InputWindow().ask_input(
                         msg='Terminal text not found. Please enter text: ',
@@ -193,9 +210,9 @@ class RunMe:
                     # Go back to the start of the loop
                     continue
                 if self.one_action_only:
-                    self.option = 'q'
+                    self.option = mo_q.key
             # If option to execute, delete, edit or show one command is chosen
-            if self.option in ['e', 'd', 'edit', 'ss']:
+            if self.option in [mo_e.key, mo_d.key, mo_edit.key, mo_ss.key]:
                 # Check if a command_id has been provided
                 if self.command_id is None:
                     # If not, ask for one
@@ -209,7 +226,7 @@ class RunMe:
                 # If command_id is provided
                 if self.command_id is not None:
                     # If chosen option is to execute a command
-                    if self.option == 'e':
+                    if self.option == mo_e.key:
                         # Use option execute function and keep note whether error occurred
                         option_stopped = self.do_repeatable_menu_option(error=ValueError,
                                                                         menu_option=self.__option_to_execute)
@@ -217,8 +234,10 @@ class RunMe:
                         if option_stopped:
                             # Go back to the start of the loop
                             continue
+                        else:
+                            print("----End of Terminal execute----")
                     # If chosen option is to delete a command
-                    if self.option == 'd':
+                    if self.option == mo_d.key:
                         # Use option delete function and keep note whether error occurred
                         option_stopped = self.do_repeatable_menu_option(error=ValueError,
                                                                         menu_option=self.__option_to_delete)
@@ -227,7 +246,7 @@ class RunMe:
                             # Go back to the start of the loop
                             continue
                     # If chosen option is to edit the command
-                    if self.option == 'edit':
+                    if self.option == mo_edit.key:
                         # Use option edit function and keep note whether error occurred
                         option_stopped = self.do_repeatable_menu_option(error=ValueError,
                                                                         menu_option=self.__option_to_edit)
@@ -236,7 +255,7 @@ class RunMe:
                             # Go back to the start of the loop
                             continue
                     # If chosen option is to ss
-                    if self.option == 'ss':
+                    if self.option == mo_ss.key:
                         # Use option to vire one command and keep note whether error occurred
                         option_stopped = self.do_repeatable_menu_option(error=ValueError,
                                                                         menu_option=self.__option_to_view_one_full_command)
@@ -245,7 +264,7 @@ class RunMe:
                             # Go back to the start of the loop
                             continue
             # If option to add a command is chosen
-            if self.option == 'a':
+            if self.option == mo_a.key:
                 # Use option add function and keep note whether error occurred
                 option_stopped = self.do_repeatable_menu_option(error=sqlite3.Error,
                                                                 menu_option=self.__option_to_add)
@@ -254,12 +273,12 @@ class RunMe:
                     # Go back to the start of the loop
                     continue
             # If option is 'exportall' do the disposition steps
-            if self.option == 'exportall':
+            if self.option == mo_exp.key:
                 # Export all
                 SavedCommands().export_all()
                 continue
             # If option is to repeat the last recorded action
-            if self.option == 'r':
+            if self.option == mo_r.key:
                 if self.last_command is not None:
                     # Assign the option last command
                     self.option = self.last_command
@@ -300,7 +319,7 @@ class RunMe:
             print('Please try again.')
             # and don't look any further
             return option, None
-        if option == 't':
+        if option == mo_t.key:
             search_text = re.search(
                 r'([t])(.+)', answer
             )
@@ -389,7 +408,7 @@ class RunMe:
 
         """
         # if an item is in the global command list
-        if item_to_check in ['b', 'bs', 'q']:
+        if item_to_check in global_commands:
             # make option the request
             self.option = item_to_check
             # set the repeater to True to trigger the above option
@@ -445,7 +464,7 @@ class RunMe:
 
         """
         # Try to execute the command. OS sends the command to the terminal.
-        SavedCommands(command_id=self.command_id, option='t').execute_command(
+        SavedCommands(command_id=self.command_id, option=mo_t.key).execute_command(
             text_to_terminal=True, text_for_terminal=self.command_id)
 
     def __option_to_delete(self):
@@ -507,7 +526,7 @@ class RunMe:
 
         """
         # Set last_used command as setuserdep
-        self.last_command = 'setuserdep'
+        self.last_command = mo_userdep.key
         # Call Change Author's Department function that handles department data
         department = UserData().change_authors_department()
         # # Check if new command is a global command
@@ -522,7 +541,7 @@ class RunMe:
 
         """
         # Set last_used command as setuser
-        self.last_command = 'setuser'
+        self.last_command = mo_username.key
         # Call Change Author function that handles author data
         username = UserData().change_author()
         # # Check if new command is a global command
@@ -537,6 +556,6 @@ class RunMe:
 
         """
         # Set last_used command as ss
-        self.last_command = 'ss'
+        self.last_command = mo_ss.key
         # and print the command info
         ViewContents().print_one_full_command(command_id=self.command_id)

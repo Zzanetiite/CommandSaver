@@ -3,6 +3,7 @@ from rich.table import Table
 from rich.console import Console
 from rich.panel import Panel
 from typing import List
+from command_saver.constants import items_before_break
 
 
 class StringFormatter:
@@ -97,7 +98,6 @@ class TableFormatter:
             table.add_column(header, justify="left")
         # Create rows and fill them with data, separate them with a break as per program design document.
         # Separate menu options that go before and after the break.
-        items_before_break = ['e', 'a', 'edit', 'd', 'c', 'r', 'ss', 't']
         items_after_break = []
         # for an item in the menu options list
         for item in self.list_to_format:

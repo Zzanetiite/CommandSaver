@@ -4,7 +4,7 @@ from command_saver.input_window.input_window import InputWindow
 from command_saver.utils.default_database import DefaultDatabase
 from command_saver.visual_design.formatter import StringFormatter
 from command_saver.errors.sql_err import SQL_err
-from command_saver.constants import database_path
+from command_saver.constants import database_path, global_commands
 
 
 class UserData:
@@ -109,7 +109,7 @@ class UserData:
                                              valid_answers='any_string'
                                              )
         # If user has chosen to leave
-        if new_author in ['b', 'bs', 'q']:
+        if new_author in global_commands:
             # return the global command
             return new_author
         # Update the author's data
@@ -152,7 +152,7 @@ class UserData:
                                                  )
         print(new_department)
         # If user has chosen to leave
-        if new_department in ['b', 'bs', 'q']:
+        if new_department in global_commands:
             # return the global command
             return new_department
         # Update the department data
