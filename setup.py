@@ -15,4 +15,7 @@ setup(
             'cs = command_saver.cs:main'
         ],
     },
+    install_requires=[
+        'rich==13.3.3',
+    ],
 )
