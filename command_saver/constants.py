@@ -56,7 +56,7 @@ print(
     f"Trying out the access to menu commands: {mo_a.key}, and descr {mo_a.description}")
 
 
-version = '2.1.3'
+version = '2.1.4'
 
 # Prepare prompt and usage instructions to use in all layouts.
 prompt = 'Please select one of the available Menu Options or an option and a command.\n'

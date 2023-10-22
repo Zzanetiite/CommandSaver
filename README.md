@@ -61,7 +61,7 @@ twine upload dist/*
 
 Locally tested using:
 ```
-pip install --user dist/command-saver-terminal-program-2.1.3.tar.gz
+pip install --user dist/command-saver-terminal-program-2.1.4.tar.gz
 ```
 
 
