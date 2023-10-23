@@ -1,0 +1,1 @@
+python -m command_saver.cs "$@"

@@ -15,6 +15,10 @@ setup(
             'cs = command_saver.cs:main'
         ],
     },
+    scripts=[
+        'scripts/cs_script.sh',  # This script is for Unix-like systems
+        'windows/cs.bat'         # This script is for Windows
+    ],
     install_requires=[
         'rich==13.3.3',
     ],
