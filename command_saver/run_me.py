@@ -92,12 +92,14 @@ class RunMe:
         """
         # Use menu options list of the program to get values
         t = ViewContents().menu_options_list
+        self.valid_options.clear()
         # for index in the menu list of tuples
         for i in range(len(t)):
             # add each menu option to valid_options
             self.valid_options.append(t[i][1])
         # from existing saved commands list
         t2 = ViewContents().all_saved_commands_list
+        self.valid_ids.clear()
         # for index in the saved commands list of tuples
         for i in range(len(t2)):
             # add the command_id to the valid_ids list

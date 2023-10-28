@@ -262,7 +262,20 @@ class SavedCommands:
         """
         # Delete the command in the database
         self.cur.execute(
-            "DELETE FROM saved_commands WHERE num_row=?", (self.command_id,))
+            "DELETE FROM saved_commands WHERE num_row=?", (
+                self.command_id,
+            )
+        )
+        # Update num_row values for remaining rows
+        self.cur.execute(
+            "UPDATE saved_commands SET num_row = num_row - 1 WHERE num_row > ?", (
+                self.command_id,
+            )
+        )
+        # Commit the transaction to apply the changes and release the lock
+        self.con.commit()
+        # Execute the VACUUM command to optimize the database (and reset rows)
+        self.cur.execute("VACUUM")
         # Commit delete and close the database
         self.commit_and_close_database()
         # Let the user know that the update has been a success.

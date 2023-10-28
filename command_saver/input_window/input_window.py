@@ -49,7 +49,7 @@ class InputWindow:
                     valid_print_text = 'any text.'
                 else:
                     valid_print_text = ', '.join(str(x) for x in valid_answers)
-                print(VALID_ANSWERS_TEMPLATE).format(valid_print_text)
+                print(VALID_ANSWERS_TEMPLATE.format(valid_print_text))
                 if msg_info is not None:
                     # Print information/instructions
                     print(msg_info)
