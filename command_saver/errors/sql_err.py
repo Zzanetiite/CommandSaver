@@ -2,6 +2,7 @@ import logging
 import sqlite3
 from command_saver.constants import log_path
 from command_saver.visual_design.formatter import StringFormatter
+from command_saver.strings_py2.logging_str import LOG_ACTION_TEMPLATE
 
 
 class SQL_err:
@@ -23,7 +24,7 @@ class SQL_err:
         # try to do call the method
         try:
             # Log the event
-            logging.info(f"Trying to {method_description}.")
+            logging.info(LOG_ACTION_TEMPLATE.format(method_description))
             # call the method
             result = method()
             return result
