@@ -52,11 +52,8 @@ menu_options_to_include = [
 menu_options_data = [(menu_option.key, menu_option.description, timestamp_now)
                      for menu_option in menu_options_to_include]
 
-print(
-    f"Trying out the access to menu commands: {mo_a.key}, and descr {mo_a.description}")
 
-
-version = '2.1.5'
+version = '2.1.6'
 
 # Prepare prompt and usage instructions to use in all layouts.
 prompt = 'Please select one of the available Menu Options or an option and a command.\n'

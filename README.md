@@ -4,20 +4,30 @@ CommandSaver is a console-interface application that saves and executes terminal
 ### Summary
 The purpose of the program is to help the user keep track of commonly used complicated commands. It is a lot like aliases.
 
-## Installation via Pip
-Use this command to install the package.
-```
-pip install command-saver-terminal-program
-```
-
-Or
+## Installation
+Install the package in the user directory using:
 
 ```
 pip install --user command-saver-terminal-program
 ```
 
+Close the shell, start a new shell and use `cs` to run.
+
+### If command not found error happens
+
+Then check where it is installed:
+```
+pip show command-saver-terminal-program
+```
+
+Check whether the installation directory is included in the user's PATH. If not, modify your shell configuration file (e.g., ~/.bashrc or ~/.zshrc) to include it. For example, you can add the following line to your ~/.zshrc file:
+
+```
+export PATH="$PATH:~/.local/bin"
+```
+
 ## Running in the terminal
-Use `cs` to launch the program in the terminal.
+Use `cs` to launch the program from bash or zsh.
 Or run a single command using `cs OPTION COMMAND_ID`
 
 # Development
@@ -61,7 +71,7 @@ twine upload dist/*
 
 Locally tested using:
 ```
-pip install --user dist/command-saver-terminal-program-2.1.5.tar.gz
+pip install --user dist/command-saver-terminal-program-2.1.6.tar.gz
 ```
 
 
