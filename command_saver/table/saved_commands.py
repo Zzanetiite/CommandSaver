@@ -45,6 +45,9 @@ class SavedCommands:
         self.option = option
         try:
             self.con = sqlite3.connect(self.database)
+            if self.con is None:
+                Err(error="Connection failed, connection is None. Database loc: {}".format(self.database),
+                    msg="connect to the database").error()
             self.cur = self.con.cursor()
         except FileNotFoundError as e:
             Err(error=e, action="locate the database at expected location").error()
