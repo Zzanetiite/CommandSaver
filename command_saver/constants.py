@@ -1,7 +1,7 @@
 from os import path, makedirs
 import time
 
-version = '2.1.7'
+version = '2.1.8'
 
 # Path for logs
 directory = path.expanduser("~")
