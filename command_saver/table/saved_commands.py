@@ -75,7 +75,13 @@ class SavedCommands:
     def find_key_id(self):
         # Locate the database key
         self.cur.execute(
-            "SELECT ROW_NUMBER() OVER() AS num_row, command_id FROM saved_commands ORDER BY num_row")
+            "SELECT "
+            "(SELECT COUNT(*) FROM saved_commands AS sc2 "
+            "WHERE sc2.num_row <= sc1.num_row) AS num_row, "
+            "sc1.command_id "
+            "FROM saved_commands AS sc1 "
+            "ORDER BY sc1.num_row"
+        )
         row_ids_key_ids = list(self.cur.fetchall())
         d_row_ids_key_ids = {}
         for item in row_ids_key_ids:
@@ -85,8 +91,15 @@ class SavedCommands:
 
     def print_row_ids(self):
         self.cur.execute(
-            "SELECT ROW_NUMBER() OVER() AS num_row, command_id, command_description,"
-            "saved_command FROM saved_commands ORDER BY command_id")
+            "SELECT "
+            "(SELECT COUNT(*) FROM saved_commands AS sc2 "
+            "WHERE sc2.command_id <= sc1.command_id) AS num_row, "
+            "sc1.command_id, "
+            "sc1.command_description, "
+            "sc1.saved_command "
+            "FROM saved_commands AS sc1 "
+            "ORDER BY sc1.command_id"
+        )
         list_all_commands = list(self.cur.fetchall())
         print(list_all_commands)
         self.commit_and_close_database()
@@ -106,7 +119,14 @@ class SavedCommands:
         """
         # Select all saved entities in the table
         self.cur.execute(
-            "SELECT ROW_NUMBER() OVER() AS num_row, command_description, saved_command FROM saved_commands ORDER BY command_id")
+            "SELECT "
+            "(SELECT COUNT(*) FROM saved_commands AS sc2 "
+            "WHERE sc2.command_id <= sc1.command_id) AS num_row, "
+            "sc1.command_description, "
+            "sc1.saved_command "
+            "FROM saved_commands AS sc1 "
+            "ORDER BY sc1.command_id"
+        )
         # Fetch the command list
         list_all_commands = list(self.cur.fetchall())
         # Commit and close the database
@@ -485,8 +505,14 @@ class SavedCommands:
         """
         # Select all saved entities in the table, order by timestamp
         self.cur.execute(
-            "SELECT ROW_NUMBER() OVER() AS num_row, command_description, saved_command  "
-            "FROM saved_commands ORDER BY timestamp_when_created DESC")
+            "SELECT ("
+            "  SELECT COUNT(*) FROM saved_commands AS sc2 "
+            "  WHERE sc2.timestamp_when_created >= sc1.timestamp_when_created) AS num_row, "
+            "sc1.command_description, "
+            "sc1.saved_command "
+            "FROM saved_commands AS sc1 "
+            "ORDER BY sc1.timestamp_when_created DESC"
+        )
         # fetch the commands
         list_all_commands = list(self.cur.fetchall())
         logging.info(
@@ -513,7 +539,14 @@ class SavedCommands:
         """
         # Select all saved entities in the table, order by popularity
         self.cur.execute(
-            "SELECT ROW_NUMBER() OVER() AS num_row, command_description, saved_command FROM saved_commands ORDER BY times_called DESC")
+            "SELECT "
+            "(SELECT COUNT(*) FROM saved_commands AS sc2 "
+            "WHERE sc2.times_called >= sc1.times_called) AS num_row, "
+            "sc1.command_description, "
+            "sc1.saved_command "
+            "FROM saved_commands AS sc1 "
+            "ORDER BY sc1.times_called DESC"
+        )
         # fetch the commands
         list_all_commands = list(self.cur.fetchall())
         logging.info(
