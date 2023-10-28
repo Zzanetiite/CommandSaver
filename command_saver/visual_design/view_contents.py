@@ -132,19 +132,6 @@ class ViewContents:
         TableFormatter(list_to_format=self.all_saved_commands_list,
                        table_title='SAVED COMMANDS').print_table_saved_commands()
 
-    def print_input_window_table(self):
-        """
-        Prints the table that shows available menu options before the input window.
-        Returns: prints a table of available options.
-
-        """
-        # Prepare options available at this point
-        available_options = self.__available_options(
-            available_list=options_within_input_menu)
-        # Print the Menu Options table that shows options available at this point
-        TableFormatter(list_to_format=available_options,
-                       table_title='OPTIONS AVAILABLE AT ANY POINT').print_table_menu_options()
-
     def print_help_page(self):
         """
         Prints the help page.

@@ -59,8 +59,6 @@ TableFormatter(table_title=table_menu_title,
 ViewContents().print_main_menu()
 # Test Saved Commands Menu layout
 ViewContents().print_saved_commands_menu()
-# Test input window table content
-ViewContents().print_input_window_table()
 # Test help page layout
 ViewContents().print_help_page()
 # Test one option - make sure 1 exists or this will fail!

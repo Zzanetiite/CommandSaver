@@ -209,6 +209,8 @@ class RunMe:
                 if option_stopped:
                     # Go back to the start of the loop
                     continue
+                else:
+                    print("----End of Terminal execute----")
                 if self.one_action_only:
                     self.option = mo_q.key
             # If option to execute, delete, edit or show one command is chosen
@@ -482,8 +484,6 @@ class RunMe:
         to print out any instructions relevant to the command.
 
         """
-        # Inform the user of the exit options
-        ViewContents().print_input_window_table()
         # Launch the edit function
         edit_response = SavedCommands(
             command_id=self.command_id).edit_command()
@@ -500,8 +500,6 @@ class RunMe:
         to print out any instructions relevant to the command.
 
         """
-        # Inform the user of the exit options
-        ViewContents().print_input_window_table()
         # Ask description
         command_description = self.__ask_command_description()
         # Check if description is a global command

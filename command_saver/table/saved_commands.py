@@ -53,9 +53,6 @@ class SavedCommands:
             Err(error=e, action="locate the database at expected location").error()
             # Create a new database in the expected location
             DefaultDatabase().create_default_database()
-        # Set up variables used in all methods
-        if self.command_id is not None and self.option != mo_t.key:
-            self.key_id = self.find_key_id()
 
     # Private functions support other methods by doing
     # repetitive, multi-choice and multi-path tasks, and also methods & actions
@@ -72,33 +69,11 @@ class SavedCommands:
         # Close the connection
         self.con.close()
 
-    def find_key_id(self):
-        # Locate the database key
-        self.cur.execute(
-            "SELECT "
-            "(SELECT COUNT(*) FROM saved_commands AS sc2 "
-            "WHERE sc2.num_row <= sc1.num_row) AS num_row, "
-            "sc1.command_id "
-            "FROM saved_commands AS sc1 "
-            "ORDER BY sc1.num_row"
-        )
-        row_ids_key_ids = list(self.cur.fetchall())
-        d_row_ids_key_ids = {}
-        for item in row_ids_key_ids:
-            d_row_ids_key_ids[item[0]] = item[1]
-        key_id = d_row_ids_key_ids[self.command_id]
-        return key_id
-
     def print_row_ids(self):
         self.cur.execute(
-            "SELECT "
-            "(SELECT COUNT(*) FROM saved_commands AS sc2 "
-            "WHERE sc2.command_id <= sc1.command_id) AS num_row, "
-            "sc1.command_id, "
-            "sc1.command_description, "
-            "sc1.saved_command "
-            "FROM saved_commands AS sc1 "
-            "ORDER BY sc1.command_id"
+            "SELECT num_row, command_description, saved_command "
+            "FROM saved_commands "
+            "ORDER BY num_row"
         )
         list_all_commands = list(self.cur.fetchall())
         print(list_all_commands)
@@ -119,13 +94,9 @@ class SavedCommands:
         """
         # Select all saved entities in the table
         self.cur.execute(
-            "SELECT "
-            "(SELECT COUNT(*) FROM saved_commands AS sc2 "
-            "WHERE sc2.command_id <= sc1.command_id) AS num_row, "
-            "sc1.command_description, "
-            "sc1.saved_command "
-            "FROM saved_commands AS sc1 "
-            "ORDER BY sc1.command_id"
+            "SELECT num_row, command_description, saved_command "
+            "FROM saved_commands "
+            "ORDER BY num_row"
         )
         # Fetch the command list
         list_all_commands = list(self.cur.fetchall())
@@ -201,12 +172,9 @@ class SavedCommands:
             command_id = command_id
         # Try to fetch the command
         try:
-            # log the event
-            logging.info(FIND_ITEM_TEMPLATE.format(
-                command_id, self.key_id, "the saved commands table"))
             # fetch the tag
             self.cur.execute(
-                "SELECT saved_command FROM saved_commands WHERE command_id LIKE ?", (self.key_id,))
+                "SELECT saved_command FROM saved_commands WHERE num_row LIKE ?", (self.command_id,))
             # return the tag in the format of a basic string
             command = ''.join(self.cur.fetchone())
             return command
@@ -283,7 +251,7 @@ class SavedCommands:
         """
         # Pass the action to the function. This way it only executes when the other function calls it.
         self.__risky_action_confirmation(
-            "delete", self.__delete_command_action)
+            "Delete", self.__delete_command_action)
 
     def __delete_command_action(self, command: str):
         """
@@ -294,7 +262,7 @@ class SavedCommands:
         """
         # Delete the command in the database
         self.cur.execute(
-            "DELETE FROM saved_commands WHERE command_id=?", (self.key_id,))
+            "DELETE FROM saved_commands WHERE num_row=?", (self.command_id,))
         # Commit delete and close the database
         self.commit_and_close_database()
         # Let the user know that the update has been a success.
@@ -349,7 +317,7 @@ class SavedCommands:
         """
         # Pass the action to the function. This way it only executes when the other function calls it.
         response = self.__risky_action_confirmation(
-            "edit", self.__edit_command_action)
+            "Edit", self.__edit_command_action)
         # response is given if the user chose to leave
         return response
 
@@ -442,7 +410,7 @@ class SavedCommands:
         """
         # by calling SQL with the new command and command_id
         self.cur.execute(
-            "UPDATE saved_commands SET saved_command=? WHERE command_id=?", (new_command, self.key_id,))
+            "UPDATE saved_commands SET saved_command=? WHERE num_row=?", (new_command, self.command_id,))
 
     def export_all(self):
         """
@@ -470,7 +438,7 @@ class SavedCommands:
             logging.info('Trying to increment the popularity of the command.')
             # Increment times called by one
             self.cur.execute(
-                "UPDATE saved_commands SET times_called = times_called + 1 WHERE command_id=?", (self.key_id,))
+                "UPDATE saved_commands SET times_called = times_called + 1 WHERE num_row=?", (self.command_id,))
         # Except if an error is thrown
         except sqlite3.Error as e:
             Err(error=e, msg="increment popularity").error()
@@ -488,7 +456,7 @@ class SavedCommands:
                 TEXT_UPDATE_TIMESTAMP_TEMPLATE.format(self.command_id))
             # Do the update
             self.cur.execute(
-                "UPDATE saved_commands SET last_edited=? WHERE command_id=?", (timestamp_now, self.key_id,))
+                "UPDATE saved_commands SET last_edited=? WHERE num_row=?", (timestamp_now, self.command_id,))
         # Except if an error is thrown
         except sqlite3.Error as e:
             # Prepare message for the error
@@ -505,13 +473,9 @@ class SavedCommands:
         """
         # Select all saved entities in the table, order by timestamp
         self.cur.execute(
-            "SELECT ("
-            "  SELECT COUNT(*) FROM saved_commands AS sc2 "
-            "  WHERE sc2.timestamp_when_created >= sc1.timestamp_when_created) AS num_row, "
-            "sc1.command_description, "
-            "sc1.saved_command "
-            "FROM saved_commands AS sc1 "
-            "ORDER BY sc1.timestamp_when_created DESC"
+            "SELECT num_row, command_description, saved_command "
+            "FROM saved_commands "
+            "ORDER BY timestamp_when_created DESC"
         )
         # fetch the commands
         list_all_commands = list(self.cur.fetchall())
@@ -539,13 +503,9 @@ class SavedCommands:
         """
         # Select all saved entities in the table, order by popularity
         self.cur.execute(
-            "SELECT "
-            "(SELECT COUNT(*) FROM saved_commands AS sc2 "
-            "WHERE sc2.times_called >= sc1.times_called) AS num_row, "
-            "sc1.command_description, "
-            "sc1.saved_command "
-            "FROM saved_commands AS sc1 "
-            "ORDER BY sc1.times_called DESC"
+            "SELECT num_row, command_description, saved_command "
+            "FROM saved_commands "
+            "ORDER BY times_called DESC"
         )
         # fetch the commands
         list_all_commands = list(self.cur.fetchall())
@@ -574,9 +534,9 @@ class SavedCommands:
         """
         # Select all saved entities in the table
         self.cur.execute(
-            "SELECT command_id, command_description, saved_command, date_created, "
+            "SELECT num_row, command_description, saved_command, date_created, "
             "timestamp_when_created, times_called, author_name, last_edited "
-            "FROM saved_commands WHERE command_id LIKE ?", (self.key_id,))
+            "FROM saved_commands WHERE num_row LIKE ?", (self.command_id,))
         # Fetch the command list
         one_full_command = list(self.cur.fetchall())
         # Commit and close the database

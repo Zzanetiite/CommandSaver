@@ -10,7 +10,8 @@ from os import path
 
 class TestSavedCommands(unittest.TestCase):
     mock_database_path = 'tests/data/command_saver.db'
-    data_sample = ('Say hello', '$echo Hello dearest world', 'date_today', 1234567890123, 0, 'admin', 1234567890123)
+    data_sample = ('Say hello', '$echo Hello dearest world',
+                   'date_today', 1234567890123, 0, 'admin', 1234567890123)
     """
     Tests SavedCommands parameters and methods.
     """
@@ -71,17 +72,19 @@ class TestSavedCommands(unittest.TestCase):
         # Mock the response for the sanity check
         mock_input_window().ask_input.return_value = 'Y'
         # Delete the element from the list to get the expected result
-        expected_result = self.indexed_table(self.original_saved_commands_table)
+        expected_result = self.indexed_table(
+            self.original_saved_commands_table)
         expected_result.pop(0)
         expected_result.sort()
         # Act
         # delete the command
         mock_user_command.delete_command()
         # reopen the database
-        mock_user_command_test = SavedCommands(database_path=self.mock_database_path)
+        mock_user_command_test = SavedCommands(
+            database_path=self.mock_database_path)
         # and check if the row exists
         mock_user_command_test.cur.execute(
-            "SELECT command_id, command_description, saved_command, date_created,"
+            "SELECT num_row, command_description, saved_command, date_created,"
             "timestamp_when_created, times_called, "
             "author_name, last_edited FROM saved_commands ORDER BY command_id")
         result = list(mock_user_command_test.cur.fetchall())
@@ -96,18 +99,21 @@ class TestSavedCommands(unittest.TestCase):
 
         """
         # create a mock command to work with
-        mock_user_command = SavedCommands(database_path=self.mock_database_path)
+        mock_user_command = SavedCommands(
+            database_path=self.mock_database_path)
         # Arrange
         description = self.data_sample[0]
         command = self.data_sample[1]
         # Act
         # add a new command
-        mock_user_command.add_new_command(command_description=description, new_command=command)
+        mock_user_command.add_new_command(
+            command_description=description, new_command=command)
         # reopen the database
-        mock_user_command_test = SavedCommands(database_path=self.mock_database_path)
+        mock_user_command_test = SavedCommands(
+            database_path=self.mock_database_path)
         # and check if the row exists
         mock_user_command_test.cur.execute(
-            "SELECT command_id, command_description, saved_command, "
+            "SELECT num_row, command_description, saved_command, "
             "date_created, timestamp_when_created, "
             "times_called, author_name, last_edited FROM saved_commands ORDER BY command_id")
         result = list(mock_user_command_test.cur.fetchall())
@@ -167,7 +173,8 @@ class TestSavedCommands(unittest.TestCase):
         t = data_table
         for i in range(len(t)):
             # Appending custom_tag, description and saved command
-            new_row = tuple([i + 1, t[i][0], t[i][1], t[i][2], t[i][3], t[i][4], t[i][5], t[i][6]])
+            new_row = tuple([i + 1, t[i][0], t[i][1], t[i][2],
+                            t[i][3], t[i][4], t[i][5], t[i][6]])
             formatted_table.append(new_row)
         # and return result table
         return formatted_table
@@ -198,8 +205,10 @@ class TestSavedCommands(unittest.TestCase):
         """
         # Arrange
         # Create a mock command to work with
-        mock_user_command = SavedCommands(database_path=self.mock_database_path)
-        expected_result = self.table_of_three_indexed_elements(self.original_saved_commands_table)
+        mock_user_command = SavedCommands(
+            database_path=self.mock_database_path)
+        expected_result = self.table_of_three_indexed_elements(
+            self.original_saved_commands_table)
         expected_result.sort()
         # Act
         # ask for the list of all saved commands
@@ -237,7 +246,7 @@ class TestSavedCommands(unittest.TestCase):
                                          )
         # And check if the row exists
         mock_command_two.cur.execute(
-            "SELECT times_called FROM saved_commands WHERE command_id=?", (command_id,))
+            "SELECT times_called FROM saved_commands WHERE num_row=?", (command_id,))
         # Fetch the record and format it
         result_increment = ''.join(map(str, mock_command_two.cur.fetchone()))
         # Assert
@@ -301,8 +310,10 @@ class TestSavedCommands(unittest.TestCase):
         """
         # Arrange
         # Create a mock command to work with
-        mock_user_command = SavedCommands(database_path=self.mock_database_path)
-        mock_user_command_2 = SavedCommands(database_path=self.mock_database_path)
+        mock_user_command = SavedCommands(
+            database_path=self.mock_database_path)
+        mock_user_command_2 = SavedCommands(
+            database_path=self.mock_database_path)
         # Act
         # Get expected contents
         expected_command_list = []
@@ -322,7 +333,8 @@ class TestSavedCommands(unittest.TestCase):
         # Assert
         self.assertEqual(expected_command_list, result)
         # Remove the disposition file
-        os.remove(path.dirname(command_saver.__file__) + '/disposition/disposition.txt')
+        os.remove(path.dirname(command_saver.__file__) +
+                  '/disposition/disposition.txt')
 
     def test_recent_commands_list(self):
         """
@@ -331,7 +343,8 @@ class TestSavedCommands(unittest.TestCase):
         """
         # Arrange
         # Create a mock command to work with
-        mock_user_command = SavedCommands(database_path=self.mock_database_path)
+        mock_user_command = SavedCommands(
+            database_path=self.mock_database_path)
         # Find expected results
         expected_result = []
         data_table = self.indexed_table(self.original_saved_commands_table)

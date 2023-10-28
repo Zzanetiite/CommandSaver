@@ -18,7 +18,7 @@ class Err(object):
         Takes errors, logs and formats them.
         Args:
             error: error text, object, message that is returned with the error.
-            msg: message to display in the error.
+            action: message to display in the error.
             logs: path to logs location.
         """
         self.e = error

@@ -117,15 +117,17 @@ class DefaultDatabase:
             cur: sqlite cursor.
         """
         # Create table in sqlite3
-        cur.execute("CREATE table saved_commands ("
-                    "command_id INTEGER NOT NULL PRIMARY KEY, "
-                    "command_description TEXT, "
-                    "saved_command TEXT NOT NULL, "
-                    "date_created TEXT, "
-                    "timestamp_when_created INTEGER, "
-                    "times_called INTEGER, "
-                    "author_name TEXT NOT NULL,"
-                    "last_edited INTEGER)")
+        cur.execute(
+            "CREATE table saved_commands ("
+            "num_row INTEGER NOT NULL PRIMARY KEY, "
+            "command_description TEXT, "
+            "saved_command TEXT NOT NULL, "
+            "date_created TEXT, "
+            "timestamp_when_created INTEGER, "
+            "times_called INTEGER, "
+            "author_name TEXT NOT NULL,"
+            "last_edited INTEGER)"
+        )
         # Add data to the table
         cur.executemany("INSERT INTO saved_commands (command_description, saved_command, "
                         "date_created, timestamp_when_created, times_called, author_name, last_edited)"
