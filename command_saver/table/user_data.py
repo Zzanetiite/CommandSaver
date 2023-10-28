@@ -80,7 +80,6 @@ class UserData:
         """
         Calls the method through sql error checker and step logger.
         """
-        print("in author change function")
         # Prepare a message for the log
         msg = f'Trying to change the author from user data table.'
         # Pass the method to the error checker. This way it only executes when the other function calls it.
@@ -101,7 +100,7 @@ class UserData:
         self.con = sqlite3.connect(self.database)
         self.cur = self.con.cursor()
         # get new author's name
-        new_author = InputWindow().ask_input(msg='Please enter the new author name:',
+        new_author = InputWindow().ask_input(msg='Please enter the new author name: ',
                                              msg_info=f'Change author command selected. '
                                                       f'Current author: {existing_author}',
                                              valid_answers='any_string'
@@ -144,7 +143,7 @@ class UserData:
         # get the existing department
         existing_department = ''.join(self.cur.fetchone())
         # ask for new department's name
-        new_department = InputWindow().ask_input(msg="Please enter the department/team.",
+        new_department = InputWindow().ask_input(msg="Please enter the department/team: ",
                                                  msg_info=f'Change department command selected. Current department: {existing_department}',
                                                  valid_answers='any_string'
                                                  )

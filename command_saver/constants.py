@@ -1,6 +1,8 @@
 from os import path, makedirs
 import time
 
+version = '2.1.7'
+
 # Path for logs
 directory = path.expanduser("~")
 folder = 'command_saver'
@@ -51,9 +53,6 @@ menu_options_to_include = [
 # Create a list of tuples excluding the timestamp
 menu_options_data = [(menu_option.key, menu_option.description, timestamp_now)
                      for menu_option in menu_options_to_include]
-
-
-version = '2.1.6'
 
 # Prepare prompt and usage instructions to use in all layouts.
 prompt = 'Please select one of the available Menu Options or an option and a command.\n'
