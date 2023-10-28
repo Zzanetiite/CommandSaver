@@ -1,7 +1,8 @@
 import logging
-
 from command_saver.visual_design.formatter import StringFormatter
 from command_saver.constants import log_path
+from command_saver.string_templates.logging_str import *
+from command_saver.string_templates.error_str import *
 
 
 class Err:
@@ -11,7 +12,7 @@ class Err:
 
     def __init__(self,
                  error,
-                 msg: str,
+                 action: str,
                  logs: str = log_path):
         """
         Takes errors, logs and formats them.
@@ -22,12 +23,12 @@ class Err:
         """
         self.e = error
         self.logs = logs
-        self.msg = msg
+        self.action = action
 
     def error(self):
-        # Log the error
-        logging.error(
-            f'Oh no! An error has occurred: {self.e=}, {type(self.e)=}. See logs in: {self.logs}')
-        # Let the user know that an error has occurred
-        StringFormatter(text_to_format=self.msg).print_red_bold()
-        # and return None, stands for: nothing was found
+        logging.error(ERROR_OCCURRED_TEMPLATE.format(
+            self.action, self.e, type(self)))
+        StringFormatter(text_to_format=error_prompt_str).print_red_bold()
+        print(ERROR_UNEXPECTED_USER_PROMPT_TEMPLATE.format(
+            self.e, see_logs_str))
+        print(see_logs_str)

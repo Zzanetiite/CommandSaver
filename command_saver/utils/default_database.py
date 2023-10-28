@@ -11,6 +11,8 @@ from command_saver.constants import (
     valid_no,
     valid_yes
 )
+from command_saver.errors.err import Err
+from command_saver.string_templates.user_prompts import *
 
 
 class DefaultDatabase:
@@ -34,10 +36,10 @@ class DefaultDatabase:
             try:
                 self.database_path = database_path
             except sqlite3.Error as e:
-                print(f"SQLite error: {e}")
+                Err(error=e, action="locate the database at expected location").error()
 
             except Exception as e:
-                print(f"An error occurred: {e}")
+                Err(error=e, action="locate the database at expected location").error()
 
         # otherwise, assume it is a test and
         else:
@@ -167,8 +169,8 @@ class DefaultDatabase:
         """
         # If database exists and user chooses to keep it
         if self.keep_backup():
-            return f"Database exists. The command cancelled and a new database not created. \n" \
-                   f"Database location: {self.database_path}"
+            return TEXT_DATABASE_EXISTS.format(self.database_path)
+
         # If it doesn't exist or has been deleted
         else:
             # Open connection with SQL

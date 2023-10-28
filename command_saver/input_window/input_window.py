@@ -1,10 +1,13 @@
 from typing import Union, List
+from command_saver.string_templates.user_prompts import *
+from command_saver.constants import global_commands
 
 
 class InputWindow:
     """
     Class that takes user input.
     """
+
     def ask_input(self,
                   msg: str,
                   valid_answers: Union[str, list, tuple],
@@ -29,7 +32,8 @@ class InputWindow:
         else:
             user_input = input(msg, )
         # Check the input and return the result
-        input_ok, user_input = self.__is_the_answer_valid(valid_answers=valid_answers, answer=user_input)
+        input_ok, user_input = self.__is_the_answer_valid(
+            valid_answers=valid_answers, answer=user_input)
         # Ask for input while we are at this question or good answer is given.
         while input_ok is not True:
             # Check if user wants to leave
@@ -39,20 +43,21 @@ class InputWindow:
             # If not True or None it is False
             else:
                 # Print what happened
-                print(f'Sorry! {user_input} is not a valid answer. Please try again or exit.')
+                print(SORRY_NOT_VALID_TEMPLATE.format(user_input))
                 # Print valid answers
                 if valid_answers == 'any_string':
                     valid_print_text = 'any text.'
                 else:
                     valid_print_text = ', '.join(str(x) for x in valid_answers)
-                print(f"Valid answers: {valid_print_text}")
+                print(VALID_ANSWERS_TEMPLATE).format(valid_print_text)
                 if msg_info is not None:
                     # Print information/instructions
                     print(msg_info)
                 # Take user input
                 user_input = input(msg, )
                 # Check the input and return the result
-                input_ok, user_input = self.__is_the_answer_valid(valid_answers=valid_answers, answer=user_input)
+                input_ok, user_input = self.__is_the_answer_valid(
+                    valid_answers=valid_answers, answer=user_input)
                 continue
         # If the loop has broken, an answer has been given.
         return user_input
@@ -66,15 +71,14 @@ class InputWindow:
         # except when it is not an integer
         except ValueError:
             pass
-        # If answer is a menu option available anywhere in the program, return it.
-        # These are: quit, Main Menu, saved commands menu
-        if answer in ['q', 'b', 'bs']:
+        # If it is a global command
+        if answer in global_commands:
             # None stands for: No answer chosen, user chose to leave.
             return None, answer
         # If allowed input is any string,
         elif valid_answers == 'any_string':
             # if it is a global command
-            if answer in ['q', 'b', 'bs']:
+            if answer in global_commands:
                 # return it
                 return None, answer
             # otherwise
@@ -91,6 +95,3 @@ class InputWindow:
         else:
             # The answer is not valid and it is returned
             return False, str(answer)
-
-
-

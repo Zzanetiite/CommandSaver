@@ -25,14 +25,14 @@ class StringFormatter:
         Prints the text given to the class in bold green.
 
         """
-        rprint(f"[bold green]{self.text_to_format}[/bold green]")
+        rprint("[bold green]{}[/bold green]".format(self.text_to_format))
 
     def print_red_bold(self):
         """
         Prints the text given to the class in bold green.
 
         """
-        rprint(f"[bold red]{self.text_to_format}[/bold red]")
+        rprint("[bold red]{}[/bold red]".format(self.text_to_format))
 
 
 class TableFormatter:

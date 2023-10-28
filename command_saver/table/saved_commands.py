@@ -11,7 +11,6 @@ from command_saver.errors.sql_err import SQL_err
 from command_saver.errors.err import Err
 from command_saver.constants import (
     database_path,
-    log_path,
     disposition_path,
     mo_t,
     soft_yes_no,
@@ -19,6 +18,9 @@ from command_saver.constants import (
     valid_yes,
     global_commands
 )
+from command_saver.string_templates.error_str import *
+from command_saver.string_templates.logging_str import *
+from command_saver.string_templates.user_prompts import *
 
 
 class SavedCommands:
@@ -45,10 +47,7 @@ class SavedCommands:
             self.con = sqlite3.connect(self.database)
             self.cur = self.con.cursor()
         except FileNotFoundError as e:
-            # Log an error
-            logging.error(f"Database not found error {e=}, {type(e)=}")
-            # Then throw an error
-            print(f"Unexpected {e=}, {type(e)=}. See logs in: {log_path}")
+            Err(error=e, action="locate the database at expected location").error()
             # Create a new database in the expected location
             DefaultDatabase().create_default_database()
         # Set up variables used in all methods
@@ -180,8 +179,8 @@ class SavedCommands:
         # Try to fetch the command
         try:
             # log the event
-            logging.info(
-                f"Trying to find (command_id, key_id) {command_id, self.key_id} in the saved commands table.")
+            logging.info(FIND_ITEM_TEMPLATE.format(
+                command_id, self.key_id, "the saved commands table"))
             # fetch the tag
             self.cur.execute(
                 "SELECT saved_command FROM saved_commands WHERE command_id LIKE ?", (self.key_id,))
@@ -191,19 +190,19 @@ class SavedCommands:
         # if command was not found
         except TypeError as e:
             # Call the error manager
-            Err(error=e, msg='Error! Command ID not found.').error()
+            Err(error=e, msg='locate the Command ID').error()
             return None
         except ValueError as e:
             # Call the error manager
-            Err(error=e, msg='Error! Command ID not found.').error()
+            Err(error=e, msg='locate the Command ID').error()
             return None
         # if sqlite happened to run into problems
         except KeyError as e:
-            Err(error=e,
-                msg=f"Error! Command ID {command_id} not found.").error()
+            msg = "locate the Command ID {}".format(command_id)
+            Err(error=e,  msg=msg).error()
         except sqlite3.Error as e:
             # Prepare message for the error
-            msg = 'SQLite error: %s' % (' '.join(e.args))
+            msg = 'access SQLite, err: %s' % (' '.join(e.args))
             # Call the error manager
             Err(error=e, msg=msg).error()
             return None
@@ -223,28 +222,29 @@ class SavedCommands:
             # Return to saved commands menu
             return ValueError
         else:
-            # Sanity check, isf user is sure they want to do the risky action
-            msg = f"Are you sure you want to {action_name} the command {self.command_id}: {command}? {soft_yes_no}"
+            # Sanity check, is user is sure they want to do the risky action
+            msg = RISKY_ACTION_TEMPLATE.format(
+                action_name, self.command_id, command, soft_yes_no)
             # Ask user if they are sure they want to delete this?
             confirmation = InputWindow().ask_input(
                 msg=msg, valid_answers=valid_yes + valid_no)
             if confirmation in valid_yes:
                 # Try to execute the command
                 try:
-                    logging.info(
-                        f"Executing {action_name} request with command ID {self.command_id}")
+                    logging.info(EXECUTING_COMMAND_TEMPLATE.format(
+                        action_name, self.command_id))
                     # by calling the action
                     action(command)
                 # Except if something went wrong with Sqlite
                 except sqlite3.Error as e:
                     # Prepare message for the error
-                    msg = f"SQLite error while processing {action_name} " \
-                          f"request with command ID {self.command_id}"
+                    msg = "process {} request with command ID {}".format(
+                        action_name, self.command_id)
                     # Call the error manager
                     Err(error=e, msg=msg).error()
             # If they choose not to delete the command,
             if confirmation in valid_no:
-                print(f'{action_name} command stopped.')
+                print("{} command stopped.".format(action_name))
                 # return to the saved commands menu
                 return ValueError
             # If user has chosen to leave and stop the edit
@@ -275,7 +275,7 @@ class SavedCommands:
         # Commit delete and close the database
         self.commit_and_close_database()
         # Let the user know that the update has been a success.
-        text = f"Success! Command with ID: {self.command_id} has been deleted'."
+        text = SUCCESSFUL_ACTION_TEMPLATE.format(self.command_id, "deleted")
         StringFormatter(text_to_format=text).print_green_bold()
 
     def execute_command(self,
@@ -289,14 +289,12 @@ class SavedCommands:
         if text_to_terminal:
             try:
                 logging.info(
-                    f"Trying to execute text into terminal. The text: {text_for_terminal}")
+                    TEXT_IN_TERMINAL_TEMPLATE.format(text_for_terminal))
                 # Run the command in the terminal
                 print("----Terminal----")
                 return os.system(str(text_for_terminal))
             except OSError as e:
-                msg = f"An error occurred when trying to execute the command." \
-                      f"\nTHe error: {e=}, {type(e)=}"
-                Err(error=e, msg=msg).error()
+                Err(error=e, msg="execute the command").error()
         # Look for the command in the database
         command_to_execute = self.find_command()
         # If None has been returned, command not found
@@ -317,15 +315,9 @@ class SavedCommands:
                 return os.system(command_to_execute)
             # except if something goes wrong with OS or sqlite
             except sqlite3.Error as e:
-                # Prepare message for the error
-                msg = f"An error occurred when trying to execute the command." \
-                      f"\nTHe error: {e=}, {type(e)=}"
-                # Call the error manager
-                Err(error=e, msg=msg).error()
+                Err(error=e, msg="update the command's popularity").error()
             except OSError as e:
-                msg = f"An error occurred when trying to execute the command." \
-                      f"\nTHe error: {e=}, {type(e)=}"
-                Err(error=e, msg=msg).error()
+                Err(error=e, msg="execute the command in terminal using os.system").error()
 
     def edit_command(self):
         """
@@ -346,7 +338,7 @@ class SavedCommands:
 
         """
         # Ask for edit command information
-        msg_panel = f"\nEdit command selected, command being edited: {command}"
+        msg_panel = TEXT_EDIT_TEMPLATE.format(command)
         # Prompt for the new command
         msg = 'Please enter the new command:'
         # Ask the table to submit new command
@@ -361,7 +353,9 @@ class SavedCommands:
         # commit and close the database
         self.commit_and_close_database()
         # Let the user know that the update has been a success.
-        text = f"Success! Command with ID: {self.command_id}, {command} updated to '{new_command}'."
+        msg = "{}, {}".format(self.command_id, command)
+        new_command_msg = "updated to {}".format(new_command)
+        text = SUCCESSFUL_ACTION_TEMPLATE.format(msg, new_command_msg)
         StringFormatter(text_to_format=text).print_green_bold()
 
     def add_new_command(self, command_description: str, new_command: str):
@@ -441,7 +435,7 @@ class SavedCommands:
                 line = ', '.join(str(v) for v in line) + '\n'
                 f.write(line)
         # Let the table know where the file is saved
-        msg = f"Successfully saved at: {disposition_path}"
+        msg = disposition_success_str
         StringFormatter(text_to_format=msg).print_green_bold()
 
     def __update_popularity(self):
@@ -456,11 +450,7 @@ class SavedCommands:
                 "UPDATE saved_commands SET times_called = times_called + 1 WHERE command_id=?", (self.key_id,))
         # Except if an error is thrown
         except sqlite3.Error as e:
-            # Prepare message for the error
-            msg = f'An error occurred whilst trying to increment popularity. ' \
-                  f'Error: {e=}, {type(e)=}'
-            # Call the error manager
-            Err(error=e, msg=msg).error()
+            Err(error=e, msg="increment popularity").error()
 
     def __update_timestamp(self):
         """
@@ -472,15 +462,15 @@ class SavedCommands:
         try:
             # log the event
             logging.info(
-                f'Trying to update timestamp of the command with commadn_id: {self.command_id}.')
+                TEXT_UPDATE_TIMESTAMP_TEMPLATE.format(self.command_id))
             # Do the update
             self.cur.execute(
                 "UPDATE saved_commands SET last_edited=? WHERE command_id=?", (timestamp_now, self.key_id,))
         # Except if an error is thrown
         except sqlite3.Error as e:
             # Prepare message for the error
-            msg = f"An error has occurred whilst trying to update " \
-                  f"the timestamp of the command with command_id: {self.command_id}."
+            msg = "update the timestamp of the command with command_id: {}".format(
+                self.command_id)
             # Call the error manager
             Err(error=e, msg=msg).error()
 

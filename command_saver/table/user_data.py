@@ -1,10 +1,11 @@
-import logging
 import sqlite3
 from command_saver.input_window.input_window import InputWindow
 from command_saver.utils.default_database import DefaultDatabase
 from command_saver.visual_design.formatter import StringFormatter
 from command_saver.errors.sql_err import SQL_err
 from command_saver.constants import database_path, global_commands
+from command_saver.errors.err import Err
+from command_saver.string_templates.user_prompts import *
 
 
 class UserData:
@@ -27,10 +28,7 @@ class UserData:
             self.cur = self.con.cursor()
         # Except it if database path is not found
         except FileNotFoundError as e:
-            # Log an error
-            logging.error(f"Database not found error {e=}, {type(e)=}")
-            # Then throw an error
-            print(f"Unexpected {e=}, {type(e)=}. See logs in: /tmp/cs.log")
+            Err(error=e, action="locate the database at expected location").error()
             # Create a new database in the expected location
             DefaultDatabase().create_default_database()
 
@@ -119,7 +117,7 @@ class UserData:
         # Close the database
         self.commit_and_close_database()
         # Print the success message
-        text = f"Author successfully changed from {existing_author} to  {new_author}."
+        text = TEXT_AUTHOR_SUCCESS.format(existing_author, new_author)
         StringFormatter(text_to_format=text).print_green_bold()
 
     def change_authors_department(self):
@@ -127,7 +125,7 @@ class UserData:
         Calls the method through sql error checker and step logger.
         """
         # Prepare a message for the log
-        msg = f"Trying to change the author's department in the user data table."
+        msg = "Trying to change the author's department in the user data table."
         # Pass the method to the error checker. This way it only executes when the other function calls it.
         department = SQL_err.sql_confirmation(method_description=msg,
                                               method=self.__change_authors_department_method,
@@ -162,5 +160,6 @@ class UserData:
         # close the database
         self.commit_and_close_database()
         # Print the success message
-        text = f"Department successfully changed from {existing_department} to  {new_department}."
+        text = TEXT_DEPARTMENT_SUCCESS.format(
+            existing_department, new_department)
         StringFormatter(text_to_format=text).print_green_bold()

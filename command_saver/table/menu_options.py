@@ -1,8 +1,9 @@
 import sqlite3
 from command_saver.utils.default_database import DefaultDatabase
 from command_saver.errors.sql_err import SQL_err
-import logging
 from command_saver.constants import database_path
+from command_saver.string_templates.error_str import *
+from command_saver.errors.err import Err
 
 
 class MenuOptions:
@@ -25,10 +26,7 @@ class MenuOptions:
             self.cur = self.con.cursor()
         # Except it if database path is not found
         except FileNotFoundError as e:
-            # Log an error
-            logging.error(f"Database not found error {e=}, {type(e)=}")
-            # Then throw an error
-            print(f"Unexpected {e=}, {type(e)=}. See logs in: /tmp/cs.log")
+            Err(error=e, action="open the database").error()
             # Create a new database in the expected location
             DefaultDatabase().create_default_database()
 
@@ -47,7 +45,7 @@ class MenuOptions:
         Calls the method through sql error checker and step logger.
         """
         # Prepare a message to log
-        msg = f'Trying to fetch all menu options from menu options table.'
+        msg = "Trying to fetch all menu options from menu options table."
         # Pass the method to the error checker. This way it only executes when the other function calls it.
         list_all_options = SQL_err.sql_confirmation(method_description=msg,
                                                     method=self.__view_options_method,

@@ -1,8 +1,8 @@
 import logging
 import sqlite3
-from command_saver.constants import log_path
-from command_saver.visual_design.formatter import StringFormatter
-from command_saver.strings_py2.logging_str import LOG_ACTION_TEMPLATE
+from command_saver.string_templates.logging_str import *
+from command_saver.string_templates.error_str import *
+from command_saver.errors.err import Err
 
 
 class SQL_err:
@@ -30,13 +30,7 @@ class SQL_err:
             return result
         # except if SQL crashes
         except sqlite3.Error as e:
-            # Log an error in the error file
-            logging.error(f"An error occurred when trying {method_description}."
-                          f"\nThe error: {e=}, {type(e)=}")
-            # Let the user know that an error has occurred.
-            StringFormatter(
-                text_to_format='An error has occurred.').print_red_bold()
-            print(f"Unexpected {e=}, {type(e)=}. See logs in: {log_path}")
+            Err(error=e, action=method_description).error()
 
     @staticmethod
     def sql_confirmation_2args(method_description: str, method,
@@ -57,16 +51,10 @@ class SQL_err:
         # try to do call the method
         try:
             # Log the event
-            logging.info(f"Trying to {method_description}.")
+            logging.info(LOG_ACTION_TEMPLATE.format(method_description))
             # call the method
             result = method(arg1, arg2)
             return result
         # except if SQL crashes
         except sqlite3.Error as e:
-            # Log an error in the error file
-            logging.error(f"An error occurred when trying {method_description}."
-                          f"\nThe error: {e=}, {type(e)=}")
-            # Let the user know that an error has occurred.
-            StringFormatter(
-                text_to_format='An error has occurred.').print_red_bold()
-            print(f"Unexpected {e=}, {type(e)=}. See logs in: /tmp/cs.log")
+            Err(error=e, action=method_description).error()
