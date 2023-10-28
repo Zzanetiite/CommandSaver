@@ -5,7 +5,7 @@ with open('README.md', 'r') as f:
 
 setup(
     name="command-saver-terminal-program",
-    version="2.1.8",
+    version="2.1.9",
     description="Simple terminal helper program to save long terminal commands. See git: https://github.com/Zzanetiite/CommandSaver",
     long_description=long_description,
     long_description_content_type='text/markdown',
