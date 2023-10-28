@@ -489,6 +489,8 @@ class SavedCommands:
             "FROM saved_commands ORDER BY timestamp_when_created DESC")
         # fetch the commands
         list_all_commands = list(self.cur.fetchall())
+        logging.info(
+            "Trying to fetch the top three latest commands from the database. The results: \n{}".format(list_all_commands))
         # Return the commands to the user. Only top 3.
         return list_all_commands[0:3]
 
@@ -514,6 +516,8 @@ class SavedCommands:
             "SELECT ROW_NUMBER() OVER() AS num_row, command_description, saved_command FROM saved_commands ORDER BY times_called DESC")
         # fetch the commands
         list_all_commands = list(self.cur.fetchall())
+        logging.info(
+            "Trying to fetch the top eight most popular commands from the database. The results: \n{}".format(list_all_commands))
         # Return the commands to the user. Only top 8.
         return list_all_commands[0:8]
 

@@ -5,7 +5,7 @@ from command_saver.string_templates.logging_str import *
 from command_saver.string_templates.error_str import *
 
 
-class Err:
+class Err(object):
     """
     Logs the error and prints an error message in the terminal.
     """
