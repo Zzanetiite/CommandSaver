@@ -1,7 +1,7 @@
 from os import path, makedirs
 import time
 
-version = '2.2.1'
+version = '2.2.2'
 
 # Path for logs
 directory = path.expanduser("~")
@@ -10,7 +10,9 @@ filename = 'cs.log'
 log_path = path.join(directory, folder, filename)
 disposition_path = path.join(directory, folder, 'disposition.txt')
 # Path for default database location to be in user's home directory
-database_path: str = path.join(directory, folder, 'command_saver.db')
+database_version = 'v2'  # Some versions may not be compatible with each other
+dabase_name = "command_saver_{}.db".format(database_version)
+database_path: str = path.join(directory, folder, dabase_name)
 # Create the directory if it doesn't exist
 makedirs(path.dirname(log_path), exist_ok=True)
 

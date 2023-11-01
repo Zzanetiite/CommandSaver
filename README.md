@@ -15,15 +15,10 @@ Close the shell, start a new shell and use `cs` to run.
 
 ### If command not found error happens
 
-Then check where it is installed:
-```
-pip show command-saver-terminal-program
-```
-
-Check whether the installation directory is included in the user's PATH. If not, modify your shell configuration file (e.g., ~/.bashrc or ~/.zshrc) to include it. For example, you can add the following line to your ~/.zshrc file:
+This error happens when the script path hasn't been added to the user's directory. Check whether the installation directory is included in the user's PATH. If not, modify your shell configuration file (e.g., ~/.bashrc or ~/.zshrc) to include it. For example, you can add the following line to your ~/.zshrc file:
 
 ```
-export PATH="$PATH:~/.local/bin"
+export PATH=/local/home/username/.local/bin:$PATH
 ```
 
 ## Running in the terminal
@@ -71,7 +66,7 @@ twine upload dist/*
 
 Locally tested using:
 ```
-pip install --user dist/command-saver-terminal-program-2.2.1.tar.gz
+pip install --user dist/command-saver-terminal-program-2.2.2.tar.gz
 ```
 
 
